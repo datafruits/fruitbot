@@ -1,6 +1,5 @@
 # Fruitbot
 
-**TODO: Add description**
 A bridge between hotdog lounge and the datafruits discord
 
 ## Installation
