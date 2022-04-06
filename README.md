@@ -1,6 +1,7 @@
 # Fruitbot
 
 **TODO: Add description**
+A bridge between hotdog lounge and the datafruits discord
 
 ## Installation
 
@@ -19,3 +20,10 @@ Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_do
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at <https://hexdocs.pm/fruitbot>.
 
+
+## Run it
+
+uhhh do this i guess
+```
+$ iex -S mix
+```

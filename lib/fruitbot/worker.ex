@@ -1,22 +1,27 @@
 defmodule Fruitbot.Worker do
   use GenServer
+  use Nostrum.Consumer
 
   alias PhoenixClient.{Socket, Channel, Message}
+  alias Nostrum.Api
 
-  def start_link(_opts) do
+  def start_link() do
     IO.puts "starting worker..."
     GenServer.start_link(__MODULE__, [])
+    Consumer.start_link(__MODULE__)
   end
 
   def init(_opts) do
     socket_opts = [
-      url: "ws://localhost:4000/socket/websocket"
+      url: System.get_env("CHAT_URL")
     ]
 
     {:ok, socket} = PhoenixClient.Socket.start_link(socket_opts)
     wait_until_connected(socket)
 
     {:ok, _response, channel} = Channel.join(socket, "rooms:lobby")
+    # set username here?
+    Channel.push(channel, "authorize", %{user: "coach"})
     {:ok, %{
       channel: channel
     }}
@@ -32,5 +37,36 @@ defmodule Fruitbot.Worker do
   def handle_info(%Message{payload: payload}, state) do
     IO.puts "Incoming Message: #{inspect payload}"
     {:noreply, state}
+  end
+
+  def handle_event({:MESSAGE_CREATE, msg, ws_state}) do
+    IO.inspect ws_state
+    # IO.inspect state
+    case msg.content do
+      "!sleep" ->
+        Api.create_message(msg.channel_id, "Going to sleep...")
+        # This won't stop other events from being handled.
+        Process.sleep(3000)
+
+      "!ping" ->
+        Api.create_message(msg.channel_id, "pyongyang!")
+
+      "!raise" ->
+        # This won't crash the entire Consumer.
+        raise "No problems here!"
+
+      _ ->
+        IO.puts "unhandled event"
+        IO.puts inspect msg
+        #Channel.push(channel, "new:msg", %{user: "coach", body: "New msg in discord from #{msg.username}: #{msg.content}"})
+        # GenServer.call(this, {:send_discord_msg, msg})
+        :ignore
+    end
+  end
+
+  # Default event handler, if you don't include this, your consumer WILL crash if
+  # you don't have a method definition for each event type.
+  def handle_event(_event) do
+    :noop
   end
 end

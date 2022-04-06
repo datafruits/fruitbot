@@ -23,7 +23,8 @@ defmodule Fruitbot.MixProject do
   defp deps do
     [
       {:phoenix_client, "~> 0.3"},
-      {:jason, "~> 1.0"}
+      {:jason, "~> 1.0"},
+      {:nostrum, "~> 0.5.1"}
     ]
   end
 end
