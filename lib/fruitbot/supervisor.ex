@@ -9,7 +9,8 @@ defmodule Fruitbot.Supervisor do
   def init(:ok) do
     children = [
       #{PhoenixClient.Socket, {socket_opts, name: PhoenixClient.Socket}},
-      {Fruitbot.Worker, name: Fruitbot.Worker}
+      {Fruitbot.Worker, name: Fruitbot.Worker},
+      {Fruitbot.NostrumConsumer, name: Fruitbot.NostrumConsumer}
     ]
 
     Supervisor.init(children, strategy: :one_for_one)
