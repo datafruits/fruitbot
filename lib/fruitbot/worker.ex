@@ -34,6 +34,10 @@ defmodule Fruitbot.Worker do
     end
   end
 
+  defp get_state, do: GenServer.call(__MODULE__, :get_state)
+
+  def handle_call(:get_state, _from, state), do: {:reply, state, state}
+
   def handle_info(%Message{payload: payload}, state) do
     IO.puts "Incoming Message: #{inspect payload}"
     {:noreply, state}
@@ -58,7 +62,8 @@ defmodule Fruitbot.Worker do
       _ ->
         IO.puts "unhandled event"
         IO.puts inspect msg
-        #Channel.push(channel, "new:msg", %{user: "coach", body: "New msg in discord from #{msg.username}: #{msg.content}"})
+        state = get_state
+        Channel.push(state["channel"], "new:msg", %{user: "coach", body: "New msg in discord from #{msg.username}: #{msg.content}"})
         # GenServer.call(this, {:send_discord_msg, msg})
         :ignore
     end
