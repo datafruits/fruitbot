@@ -23,6 +23,19 @@ defmodule Fruitbot.NostrumConsumer do
         # This won't crash the entire Consumer.
         raise "No problems here!"
 
+      "!np" ->
+        {:ok, resp} = :httpc.request(:get, {'https://streampusher-relay.club/status-json.xsl', []}, [], [body_format: :json])
+        json = elem(resp, 2)
+        {:ok, decoded } = Jason.decode(json)
+        np = Enum.at(decoded["icestats"]["source"], 0)["yp_currently_playing"]
+
+        Api.create_message(msg.channel_id, np)
+
+      "!advice" ->
+        advice = "Don't live like me Brendon. Don't get a tattoo of a cheese cow."
+
+        Api.create_message(msg.channel_id, advice)
+
       _ ->
         IO.puts "unhandled event"
         IO.puts inspect msg
@@ -33,10 +46,14 @@ defmodule Fruitbot.NostrumConsumer do
         IO.puts "is it #{msg.author.username} bot: #{msg.author.bot}"
         if msg.author.bot != true do
           IO.puts "NOT a bot"
-          GenServer.cast(Fruitbot.Worker, {:send_discord_msg, msg})
+          send_discord_message(msg)
         end
         :ignore
     end
+  end
+
+  def send_discord_message(message) do
+    GenServer.cast(Fruitbot.Worker, {:send_discord_msg, message})
   end
 
   # Default event handler, if you don't include this, your consumer WILL crash if
