@@ -38,12 +38,43 @@ defmodule Fruitbot.Worker do
   def handle_cast({:send_discord_msg, msg}, state) do
     IO.puts "sending discord msg to datafruits chat..."
     IO.puts inspect state
-    { :ok, message } = Channel.push(state.channel, "new:msg", %{user: "coach", body: "New msg in discord from #{msg.author.username}: #{msg.content}", timestamp: :os.system_time(:millisecond)})
+    message = "New msg in discord from #{msg.author.username}: #{msg.content}"
+    send_message(state.channel, message)
     {:noreply, state}
+  end
+
+  defp send_message(channel, body) do
+    channel_msg = %{
+      user: "coach",
+      body: body,
+      timestamp: :os.system_time(:millisecond),
+      bot: true,
+      avatarUrl: "https://dongles-dev.streampusher-relay.club/images/thumb/mcguirk.png?1616065459"
+    }
+    { :ok, message } = Channel.push(channel, "new:msg", channel_msg)
+    { :ok, message }
   end
 
   def handle_info(%Message{payload: payload}, state) do
     IO.puts "Incoming Message: #{inspect payload}"
-    {:noreply, state}
+    if Map.has_key?(payload, "body") do
+      IO.puts "payload body: #{payload["body"]}"
+      case payload["body"] do
+        "!advice" ->
+          advice = "Don't live like me Brendon. Don't get a tattoo of a cheese cow."
+          send_message(state.channel, advice)
+        "!next" ->
+          next_show = Fruitbot.StreampusherApi.next_show
+          send_message(state.channel, next_show)
+        _ ->
+          IO.puts "unhandled body: #{payload["body"]}"
+      end
+    end
+    { :noreply, state }
   end
+
+  # def handle_info(%Message{payload: payload}, state) do
+  #   IO.puts "Incoming Message: #{inspect payload}"
+  #   {:noreply, state}
+  # end
 end

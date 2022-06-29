@@ -36,6 +36,14 @@ defmodule Fruitbot.NostrumConsumer do
 
         Api.create_message(msg.channel_id, advice)
 
+      "!next" ->
+        # get next scheduled show
+        next_show = Fruitbot.StreampusherApi.next_show
+        Api.create_message(msg.channel_id, next_show)
+
+      # "!today" ->
+        # get today's schedule
+
       _ ->
         IO.puts "unhandled event"
         IO.puts inspect msg
