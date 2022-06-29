@@ -13,7 +13,7 @@ defmodule Fruitbot.Worker do
       url: System.get_env("CHAT_URL")
     ]
 
-    {:ok, socket} = PhoenixClient.Socket.start_link(socket_opts)
+    {:ok, socket} = Socket.start_link(socket_opts)
     wait_until_connected(socket)
 
     {:ok, _response, channel} = Channel.join(socket, "rooms:lobby")
