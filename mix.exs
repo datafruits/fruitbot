@@ -22,6 +22,8 @@ defmodule Fruitbot.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:plug_cowboy, "~> 2.0"},
+      {:cowlib, "~> 2.11", hex: :remedy_cowlib, override: true},
       {:phoenix_client, "~> 0.3"},
       {:jason, "~> 1.0"},
       {:nostrum, "~> 0.5.1"}
