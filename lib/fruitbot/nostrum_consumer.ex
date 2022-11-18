@@ -39,6 +39,7 @@ defmodule Fruitbot.NostrumConsumer do
       "!next" ->
         # get next scheduled show
         next_show = Fruitbot.StreampusherApi.next_show
+        IO.puts next_show
         Api.create_message(msg.channel_id, next_show)
 
       # "!today" ->
