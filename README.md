@@ -2,6 +2,16 @@
 
 A bridge between hotdog lounge and the datafruits discord
 
+joins both chats as 'coach'
+
+You can also use commands to find out the next scheduled live show, etc
+```
+!next
+```
+Or ask for life advice
+```
+!advice
+```
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
