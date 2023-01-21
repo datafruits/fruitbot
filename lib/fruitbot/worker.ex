@@ -38,18 +38,22 @@ defmodule Fruitbot.Worker do
   def handle_cast({:send_discord_msg, msg}, state) do
     IO.puts "sending discord msg to datafruits chat..."
     IO.puts inspect state
+    IO.puts inspect msg.author
+    avatar_url = Nostrum.Struct.User.avatar_url(msg.author)
     message = "New msg in discord from #{msg.author.username}: #{msg.content}"
-    send_message(state.channel, message)
+    send_message(state.channel, message, avatar_url)
     {:noreply, state}
   end
 
-  defp send_message(channel, body) do
+  defp send_message(channel, body, avatar_url \\ "https://cdn.discordapp.com/avatars/961310729644957786/888d15c8ee637d0793c8a733ca1dd981.webp?size=80") do
     channel_msg = %{
       user: "coach",
       body: body,
       timestamp: :os.system_time(:millisecond),
       bot: true,
-      avatarUrl: "https://dongles-dev.streampusher-relay.club/images/thumb/mcguirk.png?1616065459"
+      # change to user's url???
+      avatarUrl: avatar_url
+      # avatarUrl: avatar_url(avatar)
     }
     { :ok, message } = Channel.push(channel, "new:msg", channel_msg)
     { :ok, message }
