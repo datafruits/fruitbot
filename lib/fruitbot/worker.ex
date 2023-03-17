@@ -73,6 +73,15 @@ defmodule Fruitbot.Worker do
         "!advice" ->
           advice = "Don't live like me Brendon. Don't get a tattoo of a cheese cow."
           send_message(state.channel, advice)
+        "!sorry" ->
+          # shell to mplayer
+          System.cmd("play", ["./sfx/onion_salad_dressing.mp3"])
+          send_message(state.channel, "Must have been the onion salad dressing. Right, Brendon? :sorrymusthavebeentheonionsaladdressing:")
+        "!thisisamazing" ->
+          # shell to mplayer
+          System.cmd("play", ["./sfx/thisisamazing.mp3"])
+        "!wtf" ->
+          send_message(state.channel, "It's just a website")
         "!next" ->
           next_show = Fruitbot.StreampusherApi.next_show
           send_message(state.channel, next_show)
