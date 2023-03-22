@@ -1,5 +1,8 @@
 defmodule Fruitbot.Commands do
-  def handle_message(command) do
+  def handle_message(payload) do
+    [ command | tail ] = String.split(payload)
+    args = List.first(tail)
+    msg = ""
     case command do
       "!vr" ->
         msg = "Join the party in VR here! https://hubs.mozilla.com/MsvfAkH/terrific-satisfied-area"
@@ -7,7 +10,6 @@ defmodule Fruitbot.Commands do
         msg = "Enjoying the stream? The best way to support is with a monthly donation on ampled. https://www.ampled.com/artist/datafruits You can also make a one time donation to our paypal. https://paypal.me/datafruitsfm"
       "!advice" ->
         msg = "Don't live like me Brendon. Don't get a tattoo of a cheese cow."
-        send_message(state.channel, advice)
       "!sorry" ->
         # shell to mplayer
         System.cmd("play", ["./sfx/onion_salad_dressing.mp3"])
@@ -21,8 +23,11 @@ defmodule Fruitbot.Commands do
       "!next" ->
         next_show = Fruitbot.StreampusherApi.next_show
         msg = next_show
+      "!wiki" ->
+        wiki_link = Fruitbot.StreampusherApi.search_wiki(args)
+        msg = wiki_link
       _ ->
-        IO.puts "unhandled body: #{payload["body"]}"
+        IO.puts "unhandled command: #{msg}"
     end
     if msg do
       { :ok, msg }
