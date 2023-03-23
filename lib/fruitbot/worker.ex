@@ -60,10 +60,11 @@ defmodule Fruitbot.Worker do
   end
 
   def handle_info(%Message{payload: payload}, state) do
+    IO.inspect(payload, label: "THE PAYLOAD IS ACTUALLY A")
     IO.puts "Incoming Message: #{inspect payload}"
     if Map.has_key?(payload, "body") do
       IO.puts "payload body: #{payload["body"]}"
-      { :ok, message } = Fruitbot.Commands.handle_message payload[:body]
+      {:ok, message} = Fruitbot.Commands.handle_message payload["body"]
       send_message(state.channel, message)
     end
     { :noreply, state }
