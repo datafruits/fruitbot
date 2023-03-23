@@ -64,8 +64,14 @@ defmodule Fruitbot.Worker do
     IO.puts "Incoming Message: #{inspect payload}"
     if Map.has_key?(payload, "body") do
       IO.puts "payload body: #{payload["body"]}"
-      {:ok, message} = Fruitbot.Commands.handle_message payload["body"]
-      send_message(state.channel, message)
+      case Fruitbot.Commands.handle_message payload["body"] do
+        {:ok, message} ->
+          send_message(state.channel, message)
+        {:error} ->
+          #noop
+          IO.puts "not a command"
+          :ignore
+      end
     end
     { :noreply, state }
   end
