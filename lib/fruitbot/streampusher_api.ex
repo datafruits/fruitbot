@@ -14,7 +14,7 @@ defmodule Fruitbot.StreampusherApi do
       title = Kernel.get_in(data, ["attributes", "title"])
       host = Kernel.get_in(data, ["attributes", "hosted_by"])
       description = Kernel.get_in(data, ["attributes", "description"])
-      IO.puts("Next show is #{title}, hosted by #{host}! Description: #{description}.")
+      "Next show is #{title}, hosted by #{host}! Description: #{description}."
   end
 
   # def search_wiki(query) do
