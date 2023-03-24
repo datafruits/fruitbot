@@ -8,15 +8,15 @@ defmodule Fruitbot.NostrumConsumer do
   end
 
   def handle_event({:MESSAGE_CREATE, msg, ws_state}) do
-    IO.inspect ws_state
+    IO.inspect(ws_state)
     # IO.inspect msg
-    case Fruitbot.Commands.handle_message msg.content do
+    case Fruitbot.Commands.handle_message(msg.content) do
       {:ok, message} ->
         Api.create_message(msg.channel_id, message)
       {:error} ->
         # noop
-        IO.puts "not a command"
-        IO.puts "is it #{msg.author.username} bot: #{msg.author.bot}"
+        IO.puts("not a command")
+        IO.puts("is it #{msg.author.username} bot: #{msg.author.bot}")
         if msg.author.bot != true do
           IO.puts "NOT a bot"
           send_discord_message(msg)

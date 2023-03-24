@@ -26,7 +26,8 @@ defmodule Fruitbot.MixProject do
       {:cowlib, "~> 2.11", hex: :remedy_cowlib, override: true},
       {:phoenix_client, "~> 0.3"},
       {:jason, "~> 1.0"},
-      {:nostrum, "~> 0.5.1"}
+      {:nostrum, "~> 0.5.1"},
+      {:httpoison, "~> 2.0"}
     ]
   end
 end
