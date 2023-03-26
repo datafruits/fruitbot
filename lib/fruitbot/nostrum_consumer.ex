@@ -13,14 +13,17 @@ defmodule Fruitbot.NostrumConsumer do
     case Fruitbot.Commands.handle_message(msg.content) do
       {:ok, message} ->
         Api.create_message(msg.channel_id, message)
+
       {:error} ->
         # noop
         IO.puts("not a command")
         IO.puts("is it #{msg.author.username} bot: #{msg.author.bot}")
+
         if msg.author.bot != true do
-          IO.puts "NOT a bot"
+          IO.puts("NOT a bot")
           send_discord_message(msg)
         end
+
         :ignore
     end
   end
