@@ -32,7 +32,7 @@ be found at <https://hexdocs.pm/fruitbot>.
 
 ## Run it
 
-uhhh do this i guess
 ```
+$ source .env
 $ iex -S mix
 ```
