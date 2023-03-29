@@ -1,5 +1,11 @@
 defmodule Fruitbot.StreampusherApi do
   def user_search(query) do
+  end
+
+  def tag_search(query) do
+  end
+
+  def wiki_search(query) do
     response =
       case HTTPoison.get!("https://datafruits.streampusher.com/api/wiki_pages.json?q=#{query}") do
         %HTTPoison.Response{status_code: 200, body: body} ->
