@@ -99,21 +99,4 @@ defmodule Fruitbot.StreampusherApi do
     url = "https://datafruits.fm/shows/#{slug}"
     "Next show is #{title}, hosted by #{host}! Description: #{description}. :link: #{url}"
   end
-
-  @spec commands() :: String.t()
-  def commands do
-    """
-    !vr
-    !donate
-    !advice
-    !sorry
-    !thisisamazing
-    !gohackyourself
-    !next
-    !wiki
-    !tag
-    !datafruiter
-    !commands
-    """
-  end
 end

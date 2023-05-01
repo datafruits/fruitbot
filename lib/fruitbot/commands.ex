@@ -60,7 +60,19 @@ defmodule Fruitbot.Commands do
         {:ok, result}
 
       "!commands" ->
-        result = Fruitbot.StreampusherApi.commands()
+        result = """
+        !vr
+        !donate
+        !advice
+        !sorry
+        !thisisamazing
+        !gohackyourself
+        !next
+        !wiki
+        !tag
+        !datafruiter
+        !commands
+        """
         {:ok, result}
 
       _ ->
