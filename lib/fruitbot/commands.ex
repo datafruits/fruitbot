@@ -60,7 +60,7 @@ defmodule Fruitbot.Commands do
         {:ok, result}
 
       "!commands" ->
-        result = """
+        msg = """
         !vr
         !donate
         !advice
@@ -73,7 +73,7 @@ defmodule Fruitbot.Commands do
         !datafruiter
         !commands
         """
-        {:ok, result}
+        {:ok, msg}
 
       _ ->
         IO.puts("unhandled command: #{command}")
