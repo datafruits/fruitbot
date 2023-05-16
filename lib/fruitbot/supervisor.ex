@@ -20,6 +20,7 @@ defmodule Fruitbot.Supervisor do
     children = [
       # {PhoenixClient.Socket, {socket_opts, name: PhoenixClient.Socket}},
       Plug.Cowboy.child_spec(scheme: :http, plug: Fruitbot.Router, options: [port: get_port()]),
+      {Fruitbot.UserNotificationWorker, name: Fruitbot.UserNotificationWorker},
       {Fruitbot.Worker, name: Fruitbot.Worker},
       {Fruitbot.NostrumConsumer, name: Fruitbot.NostrumConsumer}
     ]
