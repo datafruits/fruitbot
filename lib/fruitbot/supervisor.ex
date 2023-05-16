@@ -17,11 +17,14 @@ defmodule Fruitbot.Supervisor do
 
   @impl true
   def init(:ok) do
+    [bot_config] = Application.fetch_env!(:fruitbot, :bots)
+
     children = [
       # {PhoenixClient.Socket, {socket_opts, name: PhoenixClient.Socket}},
       Plug.Cowboy.child_spec(scheme: :http, plug: Fruitbot.Router, options: [port: get_port()]),
       {Fruitbot.Worker, name: Fruitbot.Worker},
-      {Fruitbot.NostrumConsumer, name: Fruitbot.NostrumConsumer}
+      {Fruitbot.NostrumConsumer, name: Fruitbot.NostrumConsumer},
+      {TMI.Supervisor, bot_config}
     ]
 
     Supervisor.init(children, strategy: :one_for_one)

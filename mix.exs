@@ -27,7 +27,8 @@ defmodule Fruitbot.MixProject do
       {:phoenix_client, "~> 0.3"},
       {:jason, "~> 1.0"},
       {:nostrum, "~> 0.5.1"},
-      {:httpoison, "~> 2.0"}
+      {:httpoison, "~> 2.0"},
+      {:tmi, "~> 0.6.0"},
     ]
   end
 end
