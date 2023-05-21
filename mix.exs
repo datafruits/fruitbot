@@ -24,10 +24,11 @@ defmodule Fruitbot.MixProject do
     [
       {:plug_cowboy, "~> 2.0"},
       {:cowlib, "~> 2.11", hex: :remedy_cowlib, override: true},
-      {:phoenix_client, "~> 0.3"},
+      {:slipstream, "~> 1.0"},
       {:jason, "~> 1.0"},
       {:nostrum, "~> 0.5.1"},
-      {:httpoison, "~> 2.0"}
+      {:httpoison, "~> 2.0"},
+      {:castore, "~> 1.0"},
     ]
   end
 end

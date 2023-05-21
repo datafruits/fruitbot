@@ -9,7 +9,7 @@ defmodule Fruitbot.NostrumConsumer do
 
   def handle_event({:MESSAGE_CREATE, msg, ws_state}) do
     IO.inspect(ws_state)
-    # IO.inspect msg
+    IO.inspect msg
     case Fruitbot.Commands.handle_message(msg.content) do
       {:ok, message} ->
         Api.create_message(msg.channel_id, message)

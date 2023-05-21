@@ -18,9 +18,8 @@ defmodule Fruitbot.Supervisor do
   @impl true
   def init(:ok) do
     children = [
-      # {PhoenixClient.Socket, {socket_opts, name: PhoenixClient.Socket}},
       Plug.Cowboy.child_spec(scheme: :http, plug: Fruitbot.Router, options: [port: get_port()]),
-      {Fruitbot.Worker, name: Fruitbot.Worker},
+      {Fruitbot.Worker, uri: System.get_env("CHAT_URL")},
       {Fruitbot.NostrumConsumer, name: Fruitbot.NostrumConsumer}
     ]
 
