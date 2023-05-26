@@ -1,58 +1,46 @@
 defmodule Fruitbot.Worker do
-  use GenServer
+  use Slipstream,
+    restart: :temporary
 
-  alias PhoenixClient.Socket
-  alias PhoenixClient.Channel
-  alias PhoenixClient.Message
+  require Logger
 
-  def start_link(_opts) do
-    IO.puts("starting worker...")
-    GenServer.start_link(__MODULE__, [], name: __MODULE__)
+  @topic "rooms:lobby"
+
+  def start_link(args) do
+    Slipstream.start_link(__MODULE__, args, name: __MODULE__)
   end
 
-  def init(_opts) do
-    socket_opts = [
-      url: System.get_env("CHAT_URL")
-    ]
-
-    {:ok, socket} = Socket.start_link(socket_opts)
-    wait_until_connected(socket)
-
-    {:ok, _response, channel} = Channel.join(socket, "rooms:lobby")
-    # set username here?
-    Channel.push(channel, "authorize", %{user: "coach"})
-
-    {:ok,
-     %{
-       channel: channel
-     }}
+  @impl Slipstream
+  def init(config) do
+    {:ok, connect!(config)}
   end
 
-  defp wait_until_connected(socket) do
-    if !PhoenixClient.Socket.connected?(socket) do
-      Process.sleep(100)
-      wait_until_connected(socket)
-    end
+  @impl Slipstream
+  def handle_connect(socket) do
+    IO.puts('handle_connect')
+    {:ok, join(socket, @topic)}
   end
 
-  # defp get_state, do: GenServer.call(__MODULE__, :get_state)
-  #
-  # def handle_call(:get_state, _from, state), do: {:reply, state, state}
+  @impl Slipstream
+  def handle_join(@topic, _join_response, socket) do push(socket, @topic, "authorize", %{user: "coach"})
+    IO.puts('handle_join')
+    {:ok, socket}
+  end
 
-  def handle_cast({:send_discord_msg, msg}, state) do
+  def handle_cast({:send_discord_msg, msg}, socket) do
     IO.puts("sending discord msg to datafruits chat...")
-    IO.puts(inspect(state))
+    IO.puts(inspect(socket))
     IO.puts(inspect(msg.author))
     avatar_url = Nostrum.Struct.User.avatar_url(msg.author)
 
     # TODO msg.author.username is pulling from permanent discord username, not datafruits-specific username
     message = "New msg in discord from #{msg.author.username}: #{msg.content}"
-    send_message(state.channel, message, avatar_url)
-    {:noreply, state}
+    send_message(socket, message, avatar_url)
+    {:noreply, socket}
   end
 
   defp send_message(
-         channel,
+         socket,
          body,
          avatar_url \\ "https://cdn.discordapp.com/avatars/961310729644957786/888d15c8ee637d0793c8a733ca1dd981.webp?size=80"
        ) do
@@ -66,20 +54,20 @@ defmodule Fruitbot.Worker do
       # avatarUrl: avatar_url(avatar)
     }
 
-    {:ok, message} = Channel.push(channel, "new:msg", channel_msg)
+    {:ok, message} = push(socket, @topic, "new:msg", channel_msg)
     {:ok, message}
   end
 
-  def handle_info(%Message{payload: payload}, state) do
-    # IO.inspect(payload, label: "THE PAYLOAD IS ACTUALLY A")
-    IO.puts("Incoming Message: #{inspect(payload)}")
+  def handle_message(@topic, event, message, socket) do
+    IO.puts("Incoming Message: #{inspect(message)}")
+    IO.puts(inspect({@topic, event, message}))
 
-    if Map.has_key?(payload, "body") do
-      IO.puts("payload body: #{payload["body"]}")
+    if Map.has_key?(message, "body") do
+      IO.puts("message body: #{message["body"]}")
 
-      case Fruitbot.Commands.handle_message(payload["body"]) do
+      case Fruitbot.Commands.handle_message(message["body"]) do
         {:ok, message} ->
-          send_message(state.channel, message)
+          send_message(socket, message)
 
         {:error} ->
           # noop
@@ -88,11 +76,20 @@ defmodule Fruitbot.Worker do
       end
     end
 
-    {:noreply, state}
+    {:ok, socket}
   end
 
-  # def handle_info(%Message{payload: payload}, state) do
-  #   IO.puts "Incoming Message: #{inspect payload}"
-  #   {:noreply, state}
-  # end
+  # handle disconnects
+  @impl Slipstream
+  def handle_disconnect(_reason, socket) do
+    case reconnect(socket) do
+      {:ok, socket} -> {:ok, socket}
+      {:error, reason} -> {:stop, reason, socket}
+    end
+  end
+
+  @impl Slipstream
+  def handle_topic_close(topic, _reason, socket) do
+    rejoin(socket, topic)
+  end
 end
