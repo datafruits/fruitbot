@@ -77,7 +77,7 @@ defmodule Fruitbot.StreampusherApi do
   def next_show do
     response =
       case HTTPoison.get!("https://datafruits.streampusher.com/scheduled_shows/next.json") do
-        %HTTPoison.Response{status_code: 200, body: body} ->
+        %HTTPoison.Response{status_code: 200, body: body} -> 
           Jason.decode!(body)
 
         # not sure it seems the API doesn't return a 404 when search result not found, just an empty list
@@ -92,11 +92,16 @@ defmodule Fruitbot.StreampusherApi do
       end
 
     data = response["data"]
+    start = Kernel.get_in(data, ["attributes", "start"])
+    {:ok, now} = DateTime.now("Etc/UTC")
+    {:ok, then, 0} = DateTime.from_iso8601(start)
+    countdown = DateTime.diff(then, now) |> Kernel./(60) |> Kernel.trunc()
+
     title = Kernel.get_in(data, ["attributes", "title"])
     host = Kernel.get_in(data, ["attributes", "hosted_by"])
     description = Kernel.get_in(data, ["attributes", "description"])
     slug = Kernel.get_in(data, ["attributes", "slug"])
     url = "https://datafruits.fm/shows/#{slug}"
-    "Next show is #{title}, hosted by #{host}! Description: #{description}. :link: #{url}"
+    "Next show is #{title}, hosted by #{host}! Beginning in #{countdown} minutes. Description: #{description}. :link: #{url}"
   end
 end
