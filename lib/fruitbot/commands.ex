@@ -5,6 +5,14 @@ defmodule Fruitbot.Commands do
     query = Enum.join(tail)
 
     case command do
+      "!anysong" ->
+        # pull a random link from #anysong channel in discord
+        channel_id = 925232059058880522
+        {:ok, msgs } = Nostrum.Api.get_channel_messages channel_id, 200
+        msgs_with_urls = Enum.filter(Enum.map(msgs, fn m -> m.content end), fn m -> String.contains?(m, "https") end)
+        urls = Enum.map(msgs_with_urls, fn s -> List.flatten(Regex.scan(~r/https.+/iu,  s)) end)
+        msg = List.first(Enum.random(urls))
+        {:ok, msg}
       "!vr" ->
         msg =
           "Join the party in VR here! https://hubs.mozilla.com/MsvfAkH/terrific-satisfied-area"
@@ -60,6 +68,7 @@ defmodule Fruitbot.Commands do
         {:ok, result}
 
       "!commands" ->
+        # can we pull the list of commands automatically somehow?
         msg = """
         !vr
         !donate
