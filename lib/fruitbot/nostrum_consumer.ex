@@ -8,7 +8,7 @@ defmodule Fruitbot.NostrumConsumer do
     Consumer.start_link(__MODULE__)
   end
 
-  def handle_event({:MESSAGE_CREATE, msg, ws_state}) do
+  def handle_event({:message_create, msg, ws_state}) do
     IO.inspect(ws_state)
     IO.inspect msg
     IO.puts "new message in channel: #{msg.channel_id}"
@@ -17,7 +17,7 @@ defmodule Fruitbot.NostrumConsumer do
         {:ok, message} ->
           Api.create_message(msg.channel_id, message)
 
-        {:error} ->
+        {:error, :bad_command} ->
           # noop
           IO.puts("not a command")
           IO.puts("is it #{msg.author.username} bot: #{msg.author.bot}")

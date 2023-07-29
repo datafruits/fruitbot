@@ -45,7 +45,8 @@ defmodule Fruitbot.StreampusherApi do
     number = Enum.count(data)
     random_result = Enum.at(data, Enum.random(1..number))
     attributes = random_result["attributes"]
-    mp3_link = Kernel.get_in(attributes, ["audio_file_name"]) |> IO.puts()
+
+    Kernel.get_in(attributes, ["audio_file_name"]) |> IO.puts()
   end
 
   @spec wiki_search(String.t()) :: String.t()

@@ -22,11 +22,13 @@ defmodule Fruitbot.Worker do
   end
 
   @impl Slipstream
+  @spec handle_join(<<_::88>>, any, Slipstream.Socket.t()) :: {:ok, Slipstream.Socket.t()}
   def handle_join(@topic, _join_response, socket) do push(socket, @topic, "authorize", %{user: "coach"})
     IO.puts('handle_join')
     {:ok, socket}
   end
 
+  @impl true
   def handle_cast({:send_discord_msg, msg}, socket) do
     IO.puts("sending discord msg to datafruits chat...")
     IO.puts(inspect(socket))
@@ -58,6 +60,7 @@ defmodule Fruitbot.Worker do
     {:ok, message}
   end
 
+  @impl true
   def handle_message(@topic, event, message, socket) do
     IO.puts("Incoming Message: #{inspect(message)}")
     IO.puts(inspect({@topic, event, message}))
@@ -69,7 +72,7 @@ defmodule Fruitbot.Worker do
         {:ok, message} ->
           send_message(socket, message)
 
-        {:error} ->
+        {:error, :bad_command} ->
           # noop
           IO.puts("Coach doesn't understand this command. Try another!")
           :ignore
