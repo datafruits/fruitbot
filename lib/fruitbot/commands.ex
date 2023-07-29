@@ -10,13 +10,11 @@ defmodule Fruitbot.Commands do
         channel_id = 925_232_059_058_880_522
         {:ok, msgs} = Nostrum.Api.get_channel_messages(channel_id, 200)
 
-        msgs_with_urls =
+        urls =
           msgs
           |> Enum.map(fn m -> m.content end)
           |> Enum.filter(fn m -> String.contains?(m, "https") end)
-
-        urls =
-          Enum.map(msgs_with_urls, fn s -> List.flatten(Regex.scan(~r/https.+/iu, s)) end)
+          |> Enum.map(fn s -> List.flatten(Regex.scan(~r/https\S+/iu, s)) end)
           |> Enum.reject(fn each -> Enum.empty?(each) end)
 
         msg = List.first(Enum.random(urls))
