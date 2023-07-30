@@ -5,6 +5,21 @@ defmodule Fruitbot.Commands do
     query = Enum.join(tail)
 
     case command do
+      "!anysong" ->
+        # pull a random link from #anysong channel in discord
+        channel_id = 925_232_059_058_880_522
+        {:ok, msgs} = Nostrum.Api.get_channel_messages(channel_id, 200)
+
+        urls =
+          msgs
+          |> Enum.map(fn m -> m.content end)
+          |> Enum.filter(fn m -> String.contains?(m, "https") end)
+          |> Enum.map(fn s -> List.flatten(Regex.scan(~r/https\S+/iu, s)) end)
+          |> Enum.reject(fn each -> Enum.empty?(each) end)
+
+        msg = List.first(Enum.random(urls))
+        {:ok, msg}
+
       "!vr" ->
         msg =
           "Join the party in VR here! https://hubs.mozilla.com/MsvfAkH/terrific-satisfied-area"
@@ -60,7 +75,8 @@ defmodule Fruitbot.Commands do
         {:ok, result}
 
       "!commands" ->
-        msg = """
+        # can we pull the list of commands automatically somehow?
+        list = """
         !vr
         !donate
         !advice
@@ -73,11 +89,13 @@ defmodule Fruitbot.Commands do
         !datafruiter
         !commands
         """
-        {:ok, msg}
+
+        {:ok, list}
 
       _ ->
         IO.puts("unhandled command: #{command}")
-        {:error}
+        # Elixir prefers two-element tuples esp. for :ok and :error
+        {:error, :bad_command}
     end
   end
 end
