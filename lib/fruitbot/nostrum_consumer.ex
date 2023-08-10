@@ -8,7 +8,7 @@ defmodule Fruitbot.NostrumConsumer do
     Consumer.start_link(__MODULE__)
   end
 
-  def handle_event({:message_create, msg, ws_state}) do
+  def handle_event({:MESSAGE_CREATE, msg, ws_state}) do
     IO.inspect(ws_state)
     IO.inspect msg
     IO.puts "new message in channel: #{msg.channel_id}"
