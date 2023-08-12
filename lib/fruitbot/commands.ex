@@ -58,6 +58,72 @@ defmodule Fruitbot.Commands do
         msg = "go hack yourself"
         {:ok, msg}
 
+      "!bass" ->
+        # shell to mplayer
+        System.cmd("play", ["./sfx/bass.mp3"])
+        msg = "BASS"
+        {:ok, msg}
+
+      "!pewpew" ->
+        # shell to mplayer
+        System.cmd("play", ["./sfx/PEWPEW.wav"])
+        msg = "pewpew"
+        {:ok, msg}
+
+      "!bass" ->
+        # shell to mplayer
+        System.cmd("play", ["./sfx/bass.mp3"])
+        msg = "BASS"
+        {:ok, msg}
+        
+      "!scream" ->
+        # shell to mplayer
+        System.cmd("play", ["./sfx/somebody_scream.wav"])
+        msg = "c'mon ethel let's get outta here"
+        {:ok, msg}
+
+      "!internet" ->
+        # shell to mplayer
+        System.cmd("play", ["./sfx/internet.wav"])
+        msg = "https://www.youtube.com/watch?v=ip34OUo3IS0"
+        {:ok, msg}
+
+      "!penith" ->
+        # shell to mplayer
+        System.cmd("play", ["./sfx/penith.wav"])
+        msg = ":dizzy:"
+        {:ok, msg}
+
+      "!ballin" ->
+        # shell to mplayer
+        System.cmd("play", ["./sfx/ballin.wav"])
+        msg = ":lain_dad:"
+        {:ok, msg}
+
+      "!duck" ->
+        # shell to mplayer
+        System.cmd("play", ["./sfx/duck_rotate.wav"])
+        msg = ":duckle:"
+        {:ok, msg}
+
+      "!fries" ->
+        # shell to mplayer
+        System.cmd("mplayer", ["./sfx/greasy_fries.ogg"])
+        msg = ":greasyhotdogs:"
+        {:ok, msg}
+
+      "!hotdogs" ->
+        # shell to mplayer
+        System.cmd("mplayer", ["./sfx/greasy_hotd.ogg"])
+        msg = ":greasyhotdogs:"
+        {:ok, msg}
+
+      "!onionrings" ->
+        # shell to mplayer
+        System.cmd("mplayer", ["./sfx/greasy_onion_rings.ogg"])
+        msg = ":greasyhotdogs:"
+        {:ok, msg}
+
       "!next" ->
         next_show = Fruitbot.StreampusherApi.next_show()
         {:ok, next_show}
