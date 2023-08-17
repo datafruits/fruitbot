@@ -103,6 +103,7 @@ defmodule Fruitbot.StreampusherApi do
     description = Kernel.get_in(data, ["attributes", "description"])
     slug = Kernel.get_in(data, ["attributes", "slug"])
     url = "https://datafruits.fm/shows/#{slug}"
-    "Next show is #{title}, hosted by #{host}! Beginning in #{countdown} minutes. Description: #{description}. :link: #{url}"
+    image_url = Kernel.get_in(data, ["attributes", "thumb_image_url"])
+    "Next show is #{title}, hosted by #{host}! Beginning in #{countdown} minutes. Description: #{description}. :link: #{url} #{image_url}"
   end
 end
