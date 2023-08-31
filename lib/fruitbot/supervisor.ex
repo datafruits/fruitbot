@@ -20,10 +20,9 @@ defmodule Fruitbot.Supervisor do
     [bot_config] = Application.fetch_env!(:fruitbot, :bots)
 
     children = [
-      # {PhoenixClient.Socket, {socket_opts, name: PhoenixClient.Socket}},
-      Plug.Cowboy.child_spec(scheme: :http, plug: Fruitbot.Router, options: [port: get_port()]),
-      {Fruitbot.Worker, name: Fruitbot.Worker},
-      {Fruitbot.NostrumConsumer, name: Fruitbot.NostrumConsumer},
+      # Plug.Cowboy.child_spec(scheme: :http, plug: Fruitbot.Router, options: [port: get_port()]),
+      #{Fruitbot.Worker, uri: System.get_env("CHAT_URL")},
+      #{Fruitbot.NostrumConsumer, name: Fruitbot.NostrumConsumer},
       {TMI.Supervisor, bot_config}
     ]
 
