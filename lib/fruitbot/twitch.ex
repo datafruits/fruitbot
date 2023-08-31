@@ -3,7 +3,7 @@ defmodule Fruitbot.Twitch do
 
   @impl TMI.Handler
   def handle_message("!" <> command, sender, chat) do
-    IO.puts("hey: #{command}")
+    Logger.debug("hey: #{command}")
     case Fruitbot.Commands.handle_message(command) do
       {:ok, message} ->
         say(chat, message)

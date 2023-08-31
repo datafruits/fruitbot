@@ -10,7 +10,7 @@ config :fruitbot,
       bot: Fruitbot.Twitch,
       user: "coach",
       pass: System.get_env("TWITCH_PASSWORD"),
-      channels: ["freedrull_"],
+      channels: ["#freedrull_"],
       mod_channels: [],
       debug: true
     ]
