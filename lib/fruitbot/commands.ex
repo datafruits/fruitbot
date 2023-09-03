@@ -58,12 +58,6 @@ defmodule Fruitbot.Commands do
         msg = "go hack yourself"
         {:ok, msg}
 
-      "!bass" ->
-        # shell to mplayer
-        System.cmd("play", ["./sfx/bass.mp3"])
-        msg = "BASS"
-        {:ok, msg}
-
       "!pewpew" ->
         # shell to mplayer
         System.cmd("play", ["./sfx/PEWPEW.wav"])

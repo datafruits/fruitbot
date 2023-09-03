@@ -2,7 +2,7 @@ defmodule Fruitbot.NostrumConsumer do
   @just_a_website_channel_id 918577903258730506
   use Nostrum.Consumer
 
-  alias Nostrum.Api
+  # alias Nostrum.Api
 
   def start_link do
     Consumer.start_link(__MODULE__)
