@@ -14,7 +14,7 @@ defmodule Fruitbot.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger],
+      extra_applications: [:logger, :ssl, :inets],
       mod: {Fruitbot, []}
     ]
   end
@@ -28,6 +28,7 @@ defmodule Fruitbot.MixProject do
       {:jason, "~> 1.0"},
       {:nostrum, "~> 0.5.1"},
       {:httpoison, "~> 2.0"},
+      {:tmi, git: "https://github.com/mcfiredrill/tmi.ex" },
       {:castore, "~> 1.0"},
     ]
   end
