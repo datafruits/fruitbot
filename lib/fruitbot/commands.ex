@@ -28,7 +28,7 @@ defmodule Fruitbot.Commands do
 
       "!donate" ->
         msg =
-          "Enjoying the stream? The best way to support is with a monthly donation on ampled. https://www.ampled.com/artist/datafruits You can also make a one time donation to our paypal. https://paypal.me/datafruitsfm"
+          "Enjoying the stream? The best way to support is with a monthly donation on Patreon. https://patreon.com/datafruits You can also make a one time donation to our paypal. https://paypal.me/datafruitsfm"
 
         {:ok, msg}
 
