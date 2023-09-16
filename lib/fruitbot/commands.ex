@@ -112,6 +112,48 @@ defmodule Fruitbot.Commands do
         msg = ":greasyhotdogs:"
         {:ok, msg}
 
+      "!bug" ->
+        # shell to mplayer
+        System.cmd("mplayer", ["./sfx/bug.mp3"])
+        msg = "FIX THAT BUG"
+        {:ok, msg}
+
+      "!gj" ->
+        # shell to mplayer
+        System.cmd("mplayer", ["./sfx/gj.mp3"])
+        msg = ":goodbeverage:"
+        {:ok, msg}
+
+      "!false" ->
+        # shell to mplayer
+        System.cmd("mplayer", ["./sfx/false.mp3"])
+        msg = "it never happened"
+        {:ok, msg}
+
+      "!totalfabrication" ->
+        # shell to mplayer
+        System.cmd("mplayer", ["./sfx/total_fabrication.mp3"])
+        msg = "it's a total fabrication"
+        {:ok, msg}
+
+      "!boost" ->
+        # shell to mplayer
+        System.cmd("mplayer", ["./sfx/boostyrdesktoplifestyle.mp3"])
+        msg = ":marty:"
+        {:ok, msg}
+
+      "!computers" ->
+        # shell to mplayer
+        System.cmd("mplayer", ["./sfx/computers.mp3"])
+        msg = "I hope we all learned about computers"
+        {:ok, msg}
+
+      "!done" ->
+        # shell to mplayer
+        System.cmd("mplayer", ["./sfx/done.mp3"])
+        msg = "and yr done"
+        {:ok, msg}
+
       "!onionrings" ->
         # shell to mplayer
         System.cmd("mplayer", ["./sfx/greasy_onion_rings.ogg"])
