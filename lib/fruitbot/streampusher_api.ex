@@ -11,7 +11,7 @@ defmodule Fruitbot.StreampusherApi do
         data = response["data"]
         username = data["attributes"]["username"]
         url = "https://datafruits.fm/djs/#{username}"
-        "Datafruit found: #{url}"
+        { url, username }
 
       %HTTPoison.Response{status_code: 404} ->
         "#{query} not found"

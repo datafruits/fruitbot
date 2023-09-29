@@ -26,6 +26,10 @@ defmodule Fruitbot.Commands do
 
         {:ok, msg}
 
+      "!discord" ->
+        msg = "https://discord.gg/kM3bW7SM"
+        {:ok, msg}
+
       "!donate" ->
         msg =
           "Enjoying the stream? The best way to support is with a monthly donation on Patreon. https://patreon.com/datafruits You can also make a one time donation to our paypal. https://paypal.me/datafruitsfm"
@@ -173,8 +177,22 @@ defmodule Fruitbot.Commands do
         {:ok, result}
 
       "!datafruiter" ->
-        result = Fruitbot.StreampusherApi.user_search(query)
-        {:ok, result}
+        { url, username } = Fruitbot.StreampusherApi.user_search(query)
+        message = "Datafruit found: #{url}"
+        {:ok, message}
+
+      "!bigup" ->
+        query_stripped = String.replace_prefix(query, "@", "")
+        lookup = :ets.lookup(:user_bigups, query_stripped)
+        case lookup do
+          [] -> 
+            :ets.insert(:user_bigups, {query_stripped, 1})
+          [{user, count}] ->
+            :ets.insert(:user_bigups, {query_stripped, count + 1})
+        end
+        [{user, count}] = :ets.lookup(:user_bigups, query_stripped) 
+        message = ":airhorn: big up #{user} :airhorn: 88888888888888888+++++++++ #{user} has #{count} bigups"
+        { :ok, message }
 
       "!commands" ->
         # can we pull the list of commands automatically somehow?
