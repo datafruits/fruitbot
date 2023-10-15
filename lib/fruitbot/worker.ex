@@ -36,8 +36,16 @@ defmodule Fruitbot.Worker do
     avatar_url = Nostrum.Struct.User.avatar_url(msg.author)
 
     # TODO msg.author.username is pulling from permanent discord username, not datafruits-specific username
-    message = "New msg in discord from #{msg.author.username}: #{msg.content}"
-    send_message(socket, message, avatar_url)
+    if msg.sticker_items do
+      sticker_id = List.first(msg.sticker_items).id
+      content ="https://cdn.discordapp.com/stickers/#{sticker_id}.png"
+      message = "New msg in discord from #{msg.author.username}: #{content}"
+      send_message(socket, message, avatar_url)
+    else
+      content = msg.content
+      message = "New msg in discord from #{msg.author.username}: #{content}"
+      send_message(socket, message, avatar_url)
+    end
     {:noreply, socket}
   end
 
