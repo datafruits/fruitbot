@@ -4,7 +4,7 @@ defmodule Fruitbot do
   """
 
   def start(_type, _args) do
-    :ets.new(:user_bigups, [:named_table, :public])
+    PersistentEts.new(:user_bigups, "bigups.tab", [:named_table, :public])
     Fruitbot.Supervisor.start_link(name: Fruitbot.Supervisor)
   end
 end
