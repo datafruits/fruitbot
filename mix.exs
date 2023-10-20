@@ -26,7 +26,7 @@ defmodule Fruitbot.MixProject do
       {:cowlib, "~> 2.11", hex: :remedy_cowlib, override: true},
       {:slipstream, "~> 1.0"},
       {:jason, "~> 1.0"},
-      {:nostrum, "~> 0.5.1"},
+      {:nostrum, git: "git@github.com:Kraigie/nostrum.git", branch: "master" },
       {:httpoison, "~> 2.0"},
       {:tmi, git: "https://github.com/mcfiredrill/tmi.ex" },
       {:castore, "~> 1.0"},
