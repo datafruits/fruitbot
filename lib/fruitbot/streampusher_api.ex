@@ -1,4 +1,5 @@
 defmodule Fruitbot.StreampusherApi do
+
   @moduledoc """
   Functions called by user commands from the Datafruits chat.
   """
@@ -106,5 +107,18 @@ defmodule Fruitbot.StreampusherApi do
     url = "https://datafruits.fm/shows/#{show_series_slug}/episodes/#{slug}"
     image_url = Kernel.get_in(data, ["attributes", "thumb_image_url"])
     "Next show is #{title}, hosted by #{host}! Beginning in #{countdown} minutes. Description: #{description}. :link: #{url} #{image_url}"
+  end
+
+  def stream_ping do
+    case HTTPoison.get!("https://streampusher-relay.club") do
+      %HTTPoison.Response{status_code: 200, body: body} ->
+        body
+        |> Floki.find("td.streamdata") 
+        |> Enum.empty?() 
+        |> Kernel.!
+     
+      _ ->
+        "not now"
+    end
   end
 end
