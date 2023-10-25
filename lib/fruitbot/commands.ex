@@ -177,9 +177,9 @@ defmodule Fruitbot.Commands do
         {:ok, result}
 
       "!datafruiter" ->
-        { url, username } = Fruitbot.StreampusherApi.user_search(query)
-        message = "Datafruit found: #{url}"
-        {:ok, message}
+        {url, username} = Fruitbot.StreampusherApi.user_search(query)
+        msg = "Datafruit found: #{url}"
+        {:ok, msg}
 
       "!bigup" ->
         query_stripped = String.replace_prefix(query, "@", "")
@@ -191,8 +191,17 @@ defmodule Fruitbot.Commands do
             :ets.insert(:user_bigups, {query_stripped, count + 1})
         end
         [{user, count}] = :ets.lookup(:user_bigups, query_stripped) 
-        message = ":airhorn: big up #{user} :airhorn: 88888888888888888+++++++++ #{user} has #{count} bigups"
-        { :ok, message }
+        msg = ":airhorn: big up #{user} :airhorn: 88888888888888888+++++++++ #{user} has #{count} bigups"
+        {:ok, msg}
+      
+      "!stream" -> 
+        case Fruitbot.StreampusherApi.stream_ping() do
+          true -> 
+            msg = "The stream is up :arrow_up:"
+          _ -> 
+            msg = "The stream is down :arrow_down:"
+        end
+        {:ok, msg}
 
       "!commands" ->
         # can we pull the list of commands automatically somehow?
