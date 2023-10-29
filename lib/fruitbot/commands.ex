@@ -73,7 +73,7 @@ defmodule Fruitbot.Commands do
         System.cmd("play", ["./sfx/bass.mp3"])
         msg = "BASS"
         {:ok, msg}
-        
+
       "!scream" ->
         # shell to mplayer
         System.cmd("play", ["./sfx/somebody_scream.wav"])
@@ -168,6 +168,11 @@ defmodule Fruitbot.Commands do
         next_show = Fruitbot.StreampusherApi.next_show()
         {:ok, next_show}
 
+      "!latest" ->
+        # return latest archive
+        latest = Fruitbot.StreampusherApi.latest_archive()
+        {:ok, latest}
+
       "!wiki" ->
         wiki_link = Fruitbot.StreampusherApi.wiki_search(query)
         {:ok, wiki_link}
@@ -185,14 +190,42 @@ defmodule Fruitbot.Commands do
         query_stripped = String.replace_prefix(query, "@", "")
         lookup = :ets.lookup(:user_bigups, query_stripped)
         case lookup do
-          [] -> 
+          [] ->
             :ets.insert(:user_bigups, {query_stripped, 1})
           [{user, count}] ->
             :ets.insert(:user_bigups, {query_stripped, count + 1})
         end
-        [{user, count}] = :ets.lookup(:user_bigups, query_stripped) 
+        [{user, count}] = :ets.lookup(:user_bigups, query_stripped)
         message = ":airhorn: big up #{user} :airhorn: 88888888888888888+++++++++ #{user} has #{count} bigups"
         { :ok, message }
+
+      "!sfx" ->
+        # can we pull the list of sfx automatically somehow?
+        list = """
+        !sorry
+        !thisisamazing
+        !gohackyourself
+        !pewpew
+        !bass
+        !scream
+        !internet
+        !penith
+        !ballin
+        !duck
+        !fries
+        !hotdogs
+        !onionrings
+        !gj
+        !bug
+        !computers
+        !done
+        !false
+        !totalfabrication
+        !boost
+        """
+
+        {:ok, list}
+
 
       "!commands" ->
         # can we pull the list of commands automatically somehow?

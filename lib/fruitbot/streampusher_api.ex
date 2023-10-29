@@ -29,7 +29,15 @@ defmodule Fruitbot.StreampusherApi do
     response =
       case HTTPoison.get!("https://datafruits.streampusher.com/api/archives.json?tags=#{query}") do
         %HTTPoison.Response{status_code: 200, body: body} ->
-          Jason.decode!(body)
+          response = Jason.decode!(body)
+
+          data = response["data"]
+          first_result = Enum.at(data, 0)
+          slug = Kernel.get_in(first_result, ["attributes", "slug"])
+          show_series_slug = Kernel.get_in(first_result, ["attributes", "show_series_slug"])
+          url = "https://datafruits.fm/wiki/#{slug}"
+
+          "https://datafruits.fm/shows/#{show_series_slug}/episodes/#{slug}"
 
         %HTTPoison.Response{status_code: 404} ->
           "couldn't find any archives tagged with #{query}. musta been the onion salad dressing."
@@ -40,13 +48,6 @@ defmodule Fruitbot.StreampusherApi do
           # %HTTPoison.Error{reason: reason} ->
           #   IO.inspect(reason)
       end
-
-    data = response["included"]
-    number = Enum.count(data)
-    random_result = Enum.at(data, Enum.random(1..number))
-    attributes = random_result["attributes"]
-
-    Kernel.get_in(attributes, ["audio_file_name"]) |> IO.puts()
   end
 
   @spec wiki_search(String.t()) :: String.t()
@@ -78,7 +79,7 @@ defmodule Fruitbot.StreampusherApi do
   def next_show do
     response =
       case HTTPoison.get!("https://datafruits.streampusher.com/scheduled_shows/next.json") do
-        %HTTPoison.Response{status_code: 200, body: body} -> 
+        %HTTPoison.Response{status_code: 200, body: body} ->
           Jason.decode!(body)
 
         # not sure it seems the API doesn't return a 404 when search result not found, just an empty list
@@ -106,5 +107,32 @@ defmodule Fruitbot.StreampusherApi do
     url = "https://datafruits.fm/shows/#{show_series_slug}/episodes/#{slug}"
     image_url = Kernel.get_in(data, ["attributes", "thumb_image_url"])
     "Next show is #{title}, hosted by #{host}! Beginning in #{countdown} minutes. Description: #{description}. :link: #{url} #{image_url}"
+  end
+
+  @spec latest_archive() :: String.t()
+  def latest_archive do
+    response =
+      case HTTPoison.get!("https://datafruits.streampusher.com/api/archives.json") do
+        %HTTPoison.Response{status_code: 200, body: body} ->
+          response = Jason.decode!(body)
+
+          data = response["data"]
+          first_result = Enum.at(data, 0)
+          slug = Kernel.get_in(first_result, ["attributes", "slug"])
+          show_series_slug = Kernel.get_in(first_result, ["attributes", "show_series_slug"])
+          url = "https://datafruits.fm/wiki/#{slug}"
+
+          "https://datafruits.fm/shows/#{show_series_slug}/episodes/#{slug}"
+
+        # not sure it seems the API doesn't return a 404 when search result not found, just an empty list
+        %HTTPoison.Response{status_code: 404} ->
+          "Not found"
+
+        _ ->
+          "Whoops must have eaten a bad fruit"
+
+          # %HTTPoison.Error{reason: reason} ->
+          #   IO.inspect(reason)
+      end
   end
 end
