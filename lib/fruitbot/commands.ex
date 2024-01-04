@@ -32,13 +32,23 @@ defmodule Fruitbot.Commands do
 
       "!donate" ->
         msg =
-          "Enjoying the stream? The best way to support is with a monthly donation on Patreon. https://patreon.com/datafruits You can also make a one time donation to our paypal. https://paypal.me/datafruitsfm"
+          "Enjoying the stream? The best way to support is with a monthly donation on Patreon. Learn more at https://datafruits.fm/support."
 
         {:ok, msg}
 
-      # TODO would it be fun to have !advice randomly draw from the datafruits marquee or something? I mean I like the cheese cow advice but everytime
       "!advice" ->
-        msg = "Don't live like me Brendon. Don't get a tattoo of a cheese cow."
+       :random.seed(:erlang.now)
+        advices = [
+          "Don't live like me Brendon. Don't get a tattoo of a cheese cow.",
+          "Next thing you know, you're in the circus, touring, making good money.",
+          "I've got trademark products all over my body because I was drunk one night. Don't live  like me.",
+          "Your honor might I suggest a spanking on his tush tush?",
+          "Quarter for the bus, quarter for the bus. The end. Hey Brendon, the end.",
+          "What are you looking at?",
+          "It's Spaghetti Time!",
+          "Next time that thing comes near me, I'm gonna eat it. I'm serious!",
+        ]
+        msg = Enum.random(advices)
         {:ok, msg}
 
       "!sorry" ->
@@ -164,6 +174,12 @@ defmodule Fruitbot.Commands do
         msg = ":greasyhotdogs:"
         {:ok, msg}
 
+      "!awake" ->
+        # shell to mplayer
+        System.cmd("mplayer", ["./sfx/alive_alert_awake.mp3"])
+        msg = ":alive_alert_awake:"
+        {:ok, msg}
+
       "!next" ->
         next_show = Fruitbot.StreampusherApi.next_show()
         {:ok, next_show}
@@ -197,6 +213,18 @@ defmodule Fruitbot.Commands do
         end
         [{user, count}] = :ets.lookup(:user_bigups, query_stripped)
         message = ":airhorn: big up #{user} :airhorn: 88888888888888888+++++++++ #{user} has #{count} bigups"
+        { :ok, message }
+
+      # wait this is already a command...
+      # "!hotdogs" ->
+      #   { :ok, message }
+
+      "!hack" ->
+        message = "hack the planet https://github.com/datafruits"
+        { :ok, message }
+
+      "!github" ->
+        message = "hack the planet https://github.com/datafruits"
         { :ok, message }
 
       "!sfx" ->

@@ -97,7 +97,10 @@ defmodule Fruitbot.StreampusherApi do
     start = Kernel.get_in(data, ["attributes", "start"])
     {:ok, now} = DateTime.now("Etc/UTC")
     {:ok, then, 0} = DateTime.from_iso8601(start)
+    IO.puts now
+    IO.puts then
     countdown = DateTime.diff(then, now) |> Kernel./(60) |> Kernel.trunc()
+    IO.puts countdown
 
     title = Kernel.get_in(data, ["attributes", "title"])
     host = Kernel.get_in(data, ["attributes", "hosted_by"])
