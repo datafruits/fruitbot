@@ -75,6 +75,43 @@ defmodule Fruitbot.StreampusherApi do
     end
   end
 
+  @spec current_show() :: String.t()
+  def current_show do
+    response =
+      case HTTPoison.get!("https://datafruits.streampusher.com/scheduled_shows/current.json") do
+        %HTTPoison.Response{status_code: 200, body: body} ->
+          Jason.decode!(body)
+
+        # not sure it seems the API doesn't return a 404 when search result not found, just an empty list
+        %HTTPoison.Response{status_code: 404} ->
+          "Not found"
+
+        _ ->
+          "Whoops must have eaten a bad fruit"
+
+          # %HTTPoison.Error{reason: reason} ->
+          #   IO.inspect(reason)
+      end
+
+    data = response["data"]
+    start = Kernel.get_in(data, ["attributes", "start"])
+    {:ok, now} = DateTime.now("Etc/UTC")
+    {:ok, then, 0} = DateTime.from_iso8601(start)
+    IO.puts now
+    IO.puts then
+    countdown = DateTime.diff(then, now) |> Kernel./(60) |> Kernel.trunc()
+    IO.puts countdown
+
+    title = Kernel.get_in(data, ["attributes", "title"])
+    host = Kernel.get_in(data, ["attributes", "hosted_by"])
+    description = Kernel.get_in(data, ["attributes", "description"])
+    slug = Kernel.get_in(data, ["attributes", "slug"])
+    show_series_slug = Kernel.get_in(data, ["attributes", "show_series_slug"])
+    url = "https://datafruits.fm/shows/#{show_series_slug}/episodes/#{slug}"
+    image_url = Kernel.get_in(data, ["attributes", "thumb_image_url"])
+    "Next show is #{title}, hosted by #{host}! Beginning in #{countdown} minutes. Description: #{description}. :link: #{url} #{image_url}"
+  end
+
   @spec next_show() :: String.t()
   def next_show do
     response =

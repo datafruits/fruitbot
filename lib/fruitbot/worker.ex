@@ -77,12 +77,21 @@ defmodule Fruitbot.Worker do
 
     if Map.has_key?(message, "body") do
       IO.puts("message body: #{message["body"]}")
+      IO.puts("message role: #{message["role"]}")
+
+      # save message for markov chain thingies
 
       case Fruitbot.Commands.handle_message(message["body"]) do
         {:ok, message} ->
           send_message(socket, message)
 
         {:error, :bad_command} ->
+          # don't rain coach on himself
+          if(message["role"] != "bot") do
+            {:ok, model} = Markov.load("./coach_model", sanitize_tokens: true, store_log: [:train])
+            :ok = Markov.train(model, message["body"])
+            Markov.unload(model)
+          end
           # noop
           IO.puts("Coach doesn't understand this command. Try another!")
           :ignore
