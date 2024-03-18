@@ -66,12 +66,12 @@ defmodule Fruitbot.Commands do
         result = Fruitbot.StreampusherApi.tag_search(query)
         {:ok, result}
 
-      "!datafruiter" ->
+      _ when command in ["!datafruiter", "!datafruit"] ->
         { url, username } = Fruitbot.StreampusherApi.user_search(query)
         message = "Datafruit found: #{url}"
         {:ok, message}
 
-      "!bigup" ->
+      _ when command in ["!bigup", "!bigups"] ->
         query_stripped = String.replace_prefix(query, "@", "")
         lookup = :ets.lookup(:user_bigups, query_stripped)
         case lookup do
@@ -83,10 +83,6 @@ defmodule Fruitbot.Commands do
         [{user, count}] = :ets.lookup(:user_bigups, query_stripped)
         message = ":airhorn: big up #{user} :airhorn: 88888888888888888+++++++++ #{user} has #{count} bigups"
         { :ok, message }
-
-      # wait this is already a command...
-      # "!hotdogs" ->
-      #   { :ok, message }
 
       "!hack" ->
         message = "hack the planet https://github.com/datafruits"
