@@ -23,7 +23,7 @@ defmodule Fruitbot.Supervisor do
       Plug.Cowboy.child_spec(scheme: :http, plug: Fruitbot.Router, options: [port: get_port()]),
       {Fruitbot.Worker, uri: System.get_env("CHAT_URL")},
       {Fruitbot.NostrumConsumer, name: Fruitbot.NostrumConsumer},
-      {TMI.Supervisor, bot_config}
+      # {TMI.Supervisor, bot_config}
     ]
 
     Supervisor.init(children, strategy: :one_for_one)

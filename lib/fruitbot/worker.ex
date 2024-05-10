@@ -25,7 +25,7 @@ defmodule Fruitbot.Worker do
   @spec handle_join(<<_::88>>, any, Slipstream.Socket.t()) :: {:ok, Slipstream.Socket.t()}
   def handle_join(@topic, _join_response, socket) do
     avatar_url = "https://cdn.discordapp.com/avatars/961310729644957786/888d15c8ee637d0793c8a733ca1dd981.webp?size=80"
-    push(socket, @topic, "authorize", %{user: "coach", avatarUrl: avatar_url})
+    push(socket, @topic, "authorize", %{user: "grumbo", avatarUrl: avatar_url})
     IO.puts('handle_join')
     {:ok, socket}
   end
@@ -57,7 +57,7 @@ defmodule Fruitbot.Worker do
          avatar_url \\ "https://cdn.discordapp.com/avatars/961310729644957786/888d15c8ee637d0793c8a733ca1dd981.webp?size=80"
        ) do
     channel_msg = %{
-      user: "coach",
+      user: "grumbo",
       body: body,
       timestamp: :os.system_time(:millisecond),
       bot: true,
