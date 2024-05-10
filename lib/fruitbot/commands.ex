@@ -295,6 +295,10 @@ defmodule Fruitbot.Commands do
         !beefy
         !better
         !chambraine
+        !chubby
+        !ham
+        !ippen
+        !warthog
         """
 
         {:ok, list}
