@@ -180,6 +180,12 @@ defmodule Fruitbot.Commands do
         msg = ":alive_alert_awake:"
         {:ok, msg}
 
+      "!beefy" ->
+        # shell to mplayer
+        System.cmd("play", ["./sfx/beefy.mp4.wav"])
+        msg = "beefyeeeyy https://cdn.discordapp.com/attachments/996965279634571306/1238301796502474812/beefy-ezgif.com-video-to-gif-converter.gif?ex=663ec9ea&is=663d786a&hm=dbb09920ade22fea9d7282aa2ba7b4e11af84d778f469944d2ca964657d724f3&"
+        {:ok, msg}
+
       "!next" ->
         next_show = Fruitbot.StreampusherApi.next_show()
         {:ok, next_show}
