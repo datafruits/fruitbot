@@ -186,6 +186,42 @@ defmodule Fruitbot.Commands do
         msg = "beefyeeeyy https://cdn.discordapp.com/attachments/996965279634571306/1238301796502474812/beefy-ezgif.com-video-to-gif-converter.gif?ex=663ec9ea&is=663d786a&hm=dbb09920ade22fea9d7282aa2ba7b4e11af84d778f469944d2ca964657d724f3&"
         {:ok, msg}
 
+      "!better" ->
+        # shell to mplayer
+        System.cmd("play", ["./sfx/betterthanthebest.mp4.wav"])
+        msg = "better than the best!!! better than the best!!!"
+        {:ok, msg}
+
+      "!chambraine" ->
+        # shell to mplayer
+        System.cmd("play", ["./sfx/chambraine.mp4.wav"])
+        msg = "shampoo for your hair, *and* your brain https://cdn.discordapp.com/attachments/996965279634571306/1238303131347976274/ezgif-3-f8350a84dd.gif?ex=663ecb29&is=663d79a9&hm=e436562aab290cf964cf2a20158dece0c7e4679f904f670cdaf2aa4304b63587&"
+        {:ok, msg}
+
+      "!chubby" ->
+        # shell to mplayer
+        System.cmd("play", ["./sfx/chubby.mp4.wav"])
+        msg = "drink the more healthy way!"
+        {:ok, msg}
+
+      "!ham" ->
+        # shell to mplayer
+        System.cmd("play", ["./sfx/ham.mp4.wav"])
+        msg = "https://cdn.discordapp.com/attachments/996965279634571306/1238305577730310185/ezgif-3-1b99a9fbe7.gif?ex=663ecd70&is=663d7bf0&hm=13da7cfeef0c8b0fff2ef23d22595a2cc78193f62118741c8f4249ad995b78b1&"
+        {:ok, msg}
+
+      "!ippen" ->
+        # shell to mplayer
+        System.cmd("play", ["./sfx/ippenryouwase.mp4.wav"])
+        msg = "https://cdn.discordapp.com/attachments/996965279634571306/1238303575059337337/ippenryouwase-ezgif.com-video-to-gif-converter.gif?ex=663ecb92&is=663d7a12&hm=aa0c2b9f88731b3dc35ea47d7b0172888ec640a9ba5664f7971b86c7a471d2b1&"
+        {:ok, msg}
+
+      "!warthog" ->
+        # shell to mplayer
+        System.cmd("play", ["./sfx/warthog_fights_like_a_rabid_dog.mp4.wav"])
+        msg = "https://cdn.discordapp.com/attachments/996965279634571306/1238307543013523496/ezgif-3-1d2410c9d2.gif?ex=663ecf44&is=663d7dc4&hm=a76785ce29d4ec85fab5d31df61c848cff2a524f699fdbc10a023869328d6fb7&"
+        {:ok, msg}
+
       "!next" ->
         next_show = Fruitbot.StreampusherApi.next_show()
         {:ok, next_show}
@@ -256,6 +292,9 @@ defmodule Fruitbot.Commands do
         !false
         !totalfabrication
         !boost
+        !beefy
+        !better
+        !chambraine
         """
 
         {:ok, list}
