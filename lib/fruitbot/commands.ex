@@ -1,4 +1,26 @@
 defmodule Fruitbot.Commands do
+  defmodule Handlers do
+    def say_hello do
+      msg = "Hello!"
+      {:ok, msg}
+    end
+
+    def say_goodbye do
+      msg = "Goodbye!"
+      {:ok, msg}
+    end
+  end
+
+  @commands [
+    %Fruitbot.Command{aliases: ["hello", "hi"], handler: &Handlers.say_hello/0},
+    %Fruitbot.Command{aliases: ["bye"], handler: &Handlers.say_goodbye/0}
+  ]
+
+  def all_commands(), do: @commands
+
+  # command:
+  # aliases: [string]
+  # handler: function
   def handle_message(payload) do
     IO.inspect(payload)
     [command | tail] = String.split(payload)
@@ -64,6 +86,10 @@ defmodule Fruitbot.Commands do
 
       "!tag" ->
         result = Fruitbot.StreampusherApi.tag_search(query)
+        {:ok, result}
+
+      "!shrimpo" ->
+        result = Fruitbot.StreampusherApi.current_shrimpos()
         {:ok, result}
 
       _ when command in ["!datafruiter", "!datafruit"] ->

@@ -82,6 +82,7 @@ defmodule Fruitbot.Worker do
       # save message for markov chain thingies
 
       case Fruitbot.Commands.handle_message(message["body"]) do
+      # case Fruitbot.CommandHandler.handle_command(message["body"]) do
         {:ok, message} ->
           send_message(socket, message)
 

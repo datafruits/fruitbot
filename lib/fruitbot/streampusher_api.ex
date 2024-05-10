@@ -75,6 +75,52 @@ defmodule Fruitbot.StreampusherApi do
     end
   end
 
+  @spec current_shrimpos() :: String.t()
+  def current_shrimpos do
+    response =
+      case HTTPoison.get!("https://datafruits.streampusher.com/api/shrimpos.json") do
+        %HTTPoison.Response{status_code: 200, body: body} ->
+          Jason.decode!(body)
+
+        # not sure it seems the API doesn't return a 404 when search result not found, just an empty list
+        %HTTPoison.Response{status_code: 404} ->
+          "Not found"
+
+        _ ->
+          "Whoops must have eaten a bad fruit"
+
+          # %HTTPoison.Error{reason: reason} ->
+          #   IO.inspect(reason)
+      end
+    data = response["data"]
+    # get list of shrimpos
+    #
+    # current
+    #
+    # voting
+    current_shrimpos = Enum.filter(response["data"], fn s -> Kernel.get_in(s, ["attributes", "status"]) == "running" end)
+    voting_shrimpos = Enum.filter(response["data"], fn s -> Kernel.get_in(s, ["attributes", "status"]) == "voting" end)
+    current_shrimpos = for shrimpo <- current_shrimpos do
+      # calculate time left
+      end_at = Kernel.get_in(shrimpo, ["attributes", "end_at"])
+      {:ok, now} = DateTime.now("Etc/UTC")
+      {:ok, then, 0} = DateTime.from_iso8601(end_at)
+      IO.puts now
+      IO.puts then
+      countdown = DateTime.diff(then, now) |> Kernel./(60) |> Kernel.trunc()
+      IO.puts countdown
+      #
+      # calculate URL
+      slug = Kernel.get_in(shrimpo, ["attributes", "slug"])
+      url = "https://datafruits.fm/shrimpos/#{slug}"
+      %{title: shrimpo["attributes"]["title"], url: url, end_at: countdown, image: shrimpo["attributes"]["cover_art_url"]}
+    end
+    shrimpo_strings = Enum.map(current_shrimpos, fn shrimpo ->
+      "#{shrimpo[:title]} ends in #{shrimpo[:end_at]} minutes! :link: #{shrimpo[:url]} #{shrimpo[:image]}"
+    end)
+    "Current Shrimpos: \n #{Enum.join(shrimpo_strings, "\n")}"
+  end
+
   @spec current_show() :: String.t()
   def current_show do
     response =
@@ -94,22 +140,16 @@ defmodule Fruitbot.StreampusherApi do
       end
 
     data = response["data"]
-    start = Kernel.get_in(data, ["attributes", "start"])
-    {:ok, now} = DateTime.now("Etc/UTC")
-    {:ok, then, 0} = DateTime.from_iso8601(start)
-    IO.puts now
-    IO.puts then
-    countdown = DateTime.diff(then, now) |> Kernel./(60) |> Kernel.trunc()
-    IO.puts countdown
-
     title = Kernel.get_in(data, ["attributes", "title"])
     host = Kernel.get_in(data, ["attributes", "hosted_by"])
     description = Kernel.get_in(data, ["attributes", "description"])
+
     slug = Kernel.get_in(data, ["attributes", "slug"])
     show_series_slug = Kernel.get_in(data, ["attributes", "show_series_slug"])
     url = "https://datafruits.fm/shows/#{show_series_slug}/episodes/#{slug}"
     image_url = Kernel.get_in(data, ["attributes", "thumb_image_url"])
-    "Next show is #{title}, hosted by #{host}! Beginning in #{countdown} minutes. Description: #{description}. :link: #{url} #{image_url}"
+
+    "Current show is #{title}, hosted by #{host}! Description: #{description}. :link: #{url} #{image_url}"
   end
 
   @spec next_show() :: String.t()
@@ -174,5 +214,8 @@ defmodule Fruitbot.StreampusherApi do
           # %HTTPoison.Error{reason: reason} ->
           #   IO.inspect(reason)
       end
+  end
+
+  defp timeLeftFormatted(time) do
   end
 end
