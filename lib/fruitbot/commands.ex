@@ -92,6 +92,11 @@ defmodule Fruitbot.Commands do
         message = "hack the planet https://github.com/datafruits"
         { :ok, message }
 
+      "!hydrate" ->
+        message = "hey everyone make sure youre drinking enough water and taking time for yourselves and eating some nutritious food and taking breaks from social media
+coz i care abt you and i want you to be happy n healthy"
+        { :ok, message }
+
       "!commands" ->
         # can we pull the list of commands automatically somehow?
         list = """
