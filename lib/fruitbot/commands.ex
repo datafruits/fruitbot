@@ -122,7 +122,8 @@ defmodule Fruitbot.Commands do
 
       "!hotdogs" ->
         # shell to mplayer
-        System.cmd("mplayer", ["./sfx/greasy_hotd.ogg"])
+        samples = ["./sfx/greasy_hotd.ogg", "./sfx/welcome_to_The_hotdog_show.wav"]
+        System.cmd("mplayer", Enum.random(samples))
         msg = ":greasyhotdogs:"
         {:ok, msg}
 
