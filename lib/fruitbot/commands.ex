@@ -52,7 +52,7 @@ defmodule Fruitbot.Commands do
         {:ok, msg}
 
       "!sorry" ->
-        # shell to mplayer
+        # shell to play
         System.cmd("play", ["./sfx/onion_salad_dressing.mp3"])
 
         msg =
@@ -61,170 +61,170 @@ defmodule Fruitbot.Commands do
         {:ok, msg}
 
       "!thisisamazing" ->
-        # shell to mplayer
+        # shell to play
         System.cmd("play", ["./sfx/thisisamazing.mp3"])
         msg = "It's just a website"
         {:ok, msg}
 
       "!gohackyourself" ->
-        # shell to mplayer
+        # shell to play
         System.cmd("play", ["./sfx/go_hack_yourself.wav"])
         msg = "go hack yourself"
         {:ok, msg}
 
       "!pewpew" ->
-        # shell to mplayer
+        # shell to play
         System.cmd("play", ["./sfx/PEWPEW.wav"])
         msg = "pewpew"
         {:ok, msg}
 
       "!bass" ->
-        # shell to mplayer
+        # shell to play
         System.cmd("play", ["./sfx/bass.mp3"])
         msg = "BASS"
         {:ok, msg}
 
       "!scream" ->
-        # shell to mplayer
+        # shell to play
         System.cmd("play", ["./sfx/somebody_scream.wav"])
         msg = "c'mon ethel let's get outta here"
         {:ok, msg}
 
       "!internet" ->
-        # shell to mplayer
+        # shell to play
         System.cmd("play", ["./sfx/internet.wav"])
         msg = "https://www.youtube.com/watch?v=ip34OUo3IS0"
         {:ok, msg}
 
       "!penith" ->
-        # shell to mplayer
+        # shell to play
         System.cmd("play", ["./sfx/penith.wav"])
         msg = ":dizzy:"
         {:ok, msg}
 
       "!ballin" ->
-        # shell to mplayer
+        # shell to play
         System.cmd("play", ["./sfx/ballin.wav"])
         msg = ":lain_dad:"
         {:ok, msg}
 
       "!duck" ->
-        # shell to mplayer
+        # shell to play
         System.cmd("play", ["./sfx/duck_rotate.wav"])
         msg = ":duckle:"
         {:ok, msg}
 
       "!fries" ->
-        # shell to mplayer
-        System.cmd("mplayer", ["./sfx/greasy_fries.wav"])
+        # shell to play
+        System.cmd("play", ["./sfx/greasy_fries.wav"])
         msg = ":greasyhotdogs:"
         {:ok, msg}
 
       "!hotdogs" ->
-        # shell to mplayer
+        # shell to play
         samples = ["./sfx/greasy_hotd.wav", "./sfx/welcome_to_The_hotdog_show.wav"]
-        System.cmd("mplayer", Enum.random(samples))
+        System.cmd("play", Enum.random(samples))
         msg = ":greasyhotdogs:"
         {:ok, msg}
 
       "!bug" ->
-        # shell to mplayer
-        System.cmd("mplayer", ["./sfx/bug.mp3"])
+        # shell to play
+        System.cmd("play", ["./sfx/bug.mp3"])
         msg = "FIX THAT BUG"
         {:ok, msg}
 
       "!gj" ->
-        # shell to mplayer
-        System.cmd("mplayer", ["./sfx/gj.mp3"])
+        # shell to play
+        System.cmd("play", ["./sfx/gj.mp3"])
         msg = ":goodbeverage:"
         {:ok, msg}
 
       "!false" ->
-        # shell to mplayer
-        System.cmd("mplayer", ["./sfx/false.mp3"])
+        # shell to play
+        System.cmd("play", ["./sfx/false.mp3"])
         msg = "it never happened"
         {:ok, msg}
 
       "!totalfabrication" ->
-        # shell to mplayer
-        System.cmd("mplayer", ["./sfx/total_fabrication.mp3"])
+        # shell to play
+        System.cmd("play", ["./sfx/total_fabrication.mp3"])
         msg = "it's a total fabrication"
         {:ok, msg}
 
       "!boost" ->
-        # shell to mplayer
-        System.cmd("mplayer", ["./sfx/boostyrdesktoplifestyle.mp3"])
+        # shell to play
+        System.cmd("play", ["./sfx/boostyrdesktoplifestyle.mp3"])
         msg = ":marty:"
         {:ok, msg}
 
       "!computers" ->
-        # shell to mplayer
-        System.cmd("mplayer", ["./sfx/computers.mp3"])
+        # shell to play
+        System.cmd("play", ["./sfx/computers.mp3"])
         msg = "I hope we all learned about computers"
         {:ok, msg}
 
       "!done" ->
-        # shell to mplayer
-        System.cmd("mplayer", ["./sfx/done.mp3"])
+        # shell to play
+        System.cmd("play", ["./sfx/done.mp3"])
         msg = "and yr done"
         {:ok, msg}
 
       "!onionrings" ->
-        # shell to mplayer
-        System.cmd("mplayer", ["./sfx/greasy_onion_rings.wav"])
+        # shell to play
+        System.cmd("play", ["./sfx/greasy_onion_rings.wav"])
         msg = ":greasyhotdogs:"
         {:ok, msg}
 
       "!awake" ->
-        # shell to mplayer
-        System.cmd("mplayer", ["./sfx/alive_alert_awake.mp3"])
+        # shell to play
+        System.cmd("play", ["./sfx/alive_alert_awake.mp3"])
         msg = ":alive_alert_awake:"
         {:ok, msg}
 
       "!beefy" ->
-        # shell to mplayer
+        # shell to play
         System.cmd("play", ["./sfx/beefy.mp4.wav"])
         msg = "beefyeeeyy https://cdn.discordapp.com/attachments/996965279634571306/1238301796502474812/beefy-ezgif.com-video-to-gif-converter.gif?ex=663ec9ea&is=663d786a&hm=dbb09920ade22fea9d7282aa2ba7b4e11af84d778f469944d2ca964657d724f3&"
         {:ok, msg}
 
       "!better" ->
-        # shell to mplayer
+        # shell to play
         System.cmd("play", ["./sfx/betterthanthebest.mp4.wav"])
         msg = "better than the best!!! better than the best!!!"
         {:ok, msg}
 
       "!chambraine" ->
-        # shell to mplayer
+        # shell to play
         System.cmd("play", ["./sfx/chambraine.mp4.wav"])
         msg = "shampoo for your hair, *and* your brain https://cdn.discordapp.com/attachments/996965279634571306/1238303131347976274/ezgif-3-f8350a84dd.gif?ex=663ecb29&is=663d79a9&hm=e436562aab290cf964cf2a20158dece0c7e4679f904f670cdaf2aa4304b63587&"
         {:ok, msg}
 
       "!chubby" ->
-        # shell to mplayer
+        # shell to play
         System.cmd("play", ["./sfx/chubby.mp4.wav"])
         msg = "drink the more healthy way!"
         {:ok, msg}
 
       "!ham" ->
-        # shell to mplayer
+        # shell to play
         System.cmd("play", ["./sfx/ham.mp4.wav"])
         msg = "https://cdn.discordapp.com/attachments/996965279634571306/1238305577730310185/ezgif-3-1b99a9fbe7.gif?ex=663ecd70&is=663d7bf0&hm=13da7cfeef0c8b0fff2ef23d22595a2cc78193f62118741c8f4249ad995b78b1&"
         {:ok, msg}
 
       "!ippen" ->
-        # shell to mplayer
+        # shell to play
         System.cmd("play", ["./sfx/ippenryouwase.mp4.wav"])
         msg = "https://cdn.discordapp.com/attachments/996965279634571306/1238303575059337337/ippenryouwase-ezgif.com-video-to-gif-converter.gif?ex=663ecb92&is=663d7a12&hm=aa0c2b9f88731b3dc35ea47d7b0172888ec640a9ba5664f7971b86c7a471d2b1&"
         {:ok, msg}
 
       "!warthog" ->
-        # shell to mplayer
+        # shell to play
         System.cmd("play", ["./sfx/warthog_fights_like_a_rabid_dog.mp4.wav"])
         msg = "https://cdn.discordapp.com/attachments/996965279634571306/1238307543013523496/ezgif-3-1d2410c9d2.gif?ex=663ecf44&is=663d7dc4&hm=a76785ce29d4ec85fab5d31df61c848cff2a524f699fdbc10a023869328d6fb7&"
         {:ok, msg}
 
       "!cheese" ->
-        # shell to mplayer
+        # shell to play
         System.cmd("play", ["./sfx/cheese.wav"])
         msg = "now that's my kinda cheese"
         {:ok, msg}
