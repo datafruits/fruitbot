@@ -116,13 +116,13 @@ defmodule Fruitbot.Commands do
 
       "!fries" ->
         # shell to mplayer
-        System.cmd("mplayer", ["./sfx/greasy_fries.ogg"])
+        System.cmd("mplayer", ["./sfx/greasy_fries.wav"])
         msg = ":greasyhotdogs:"
         {:ok, msg}
 
       "!hotdogs" ->
         # shell to mplayer
-        samples = ["./sfx/greasy_hotd.ogg", "./sfx/welcome_to_The_hotdog_show.wav"]
+        samples = ["./sfx/greasy_hotd.wav", "./sfx/welcome_to_The_hotdog_show.wav"]
         System.cmd("mplayer", Enum.random(samples))
         msg = ":greasyhotdogs:"
         {:ok, msg}
@@ -171,7 +171,7 @@ defmodule Fruitbot.Commands do
 
       "!onionrings" ->
         # shell to mplayer
-        System.cmd("mplayer", ["./sfx/greasy_onion_rings.ogg"])
+        System.cmd("mplayer", ["./sfx/greasy_onion_rings.wav"])
         msg = ":greasyhotdogs:"
         {:ok, msg}
 
