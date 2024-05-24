@@ -222,6 +222,12 @@ defmodule Fruitbot.Commands do
         msg = "https://cdn.discordapp.com/attachments/996965279634571306/1238307543013523496/ezgif-3-1d2410c9d2.gif?ex=663ecf44&is=663d7dc4&hm=a76785ce29d4ec85fab5d31df61c848cff2a524f699fdbc10a023869328d6fb7&"
         {:ok, msg}
 
+      "!cheese" ->
+        # shell to mplayer
+        System.cmd("play", ["./sfx/cheese.wav"])
+        msg = "now that's my kinda cheese"
+        {:ok, msg}
+
       "!next" ->
         next_show = Fruitbot.StreampusherApi.next_show()
         {:ok, next_show}
@@ -299,6 +305,7 @@ defmodule Fruitbot.Commands do
         !ham
         !ippen
         !warthog
+        !cheese
         """
 
         {:ok, list}
