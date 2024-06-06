@@ -24,7 +24,7 @@ defmodule Fruitbot.Worker do
   @impl Slipstream
   @spec handle_join(<<_::88>>, any, Slipstream.Socket.t()) :: {:ok, Slipstream.Socket.t()}
   def handle_join(@topic, _join_response, socket) do
-    avatar_url = "https://media.discordapp.net/attachments/996965279634571306/1243376716970332273/gooeyai.png?ex=6651404e&is=664feece&hm=deb6e99f3c94fbfbb97cce9c28dae99f406482cf15d005ae69a44d4e0ac1bc2a&=&format=webp&quality=lossless&width=1089&height=613"
+    avatar_url = "https://freedrull.online/assets/images/bye.gif"
     push(socket, @topic, "authorize", %{user: "gooeyai", avatarUrl: avatar_url})
     IO.puts('handle_join')
     {:ok, socket}
@@ -54,7 +54,7 @@ defmodule Fruitbot.Worker do
   defp send_message(
          socket,
          body,
-         avatar_url \\ "https://media.discordapp.net/attachments/996965279634571306/1243376716970332273/gooeyai.png?ex=6651404e&is=664feece&hm=deb6e99f3c94fbfbb97cce9c28dae99f406482cf15d005ae69a44d4e0ac1bc2a&=&format=webp&quality=lossless&width=1089&height=613"
+         avatar_url \\ "https://freedrull.online/assets/images/bye.gif"
        ) do
     channel_msg = %{
       user: "gooeyai",
