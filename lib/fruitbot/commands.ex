@@ -120,7 +120,7 @@ defmodule Fruitbot.Commands do
         msg = ":greasyhotdogs:"
         {:ok, msg}
 
-      "!hotdogs" ->
+      when command in ["!hotdogs", "!hotdog"] ->
         # shell to play
         samples = ["./sfx/greasy_hotd.wav", "./sfx/welcome_to_The_hotdog_show.wav"]
 	selection = Enum.random(samples)
@@ -134,7 +134,7 @@ defmodule Fruitbot.Commands do
         msg = "FIX THAT BUG"
         {:ok, msg}
 
-      "!burger" ->
+      when command in ["!burgers", "!burger"] ->
         # shell to play
         System.cmd("play", ["./sfx/giant_burger.mp3"])
         msg = "1 giant burger"
