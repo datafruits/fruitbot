@@ -313,6 +313,7 @@ defmodule Fruitbot.Commands do
         !ippen
         !warthog
         !cheese
+        !burger
         """
 
         {:ok, list}
