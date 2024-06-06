@@ -123,7 +123,8 @@ defmodule Fruitbot.Commands do
       "!hotdogs" ->
         # shell to play
         samples = ["./sfx/greasy_hotd.wav", "./sfx/welcome_to_The_hotdog_show.wav"]
-        System.cmd("play", Enum.random(samples))
+	selection = Enum.random(samples)
+        System.cmd("play", [selection])
         msg = ":greasyhotdogs:"
         {:ok, msg}
 
