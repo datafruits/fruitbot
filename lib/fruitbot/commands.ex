@@ -122,7 +122,7 @@ defmodule Fruitbot.Commands do
 
       when command in ["!hotdogs", "!hotdog"] ->
         # shell to play
-        samples = ["./sfx/greasy_hotd.wav", "./sfx/welcome_to_The_hotdog_show.wav"]
+        samples = ["./sfx/greasy_hotd.wav", "./sfx/welcome_to_The_hotdog_show.wav", "./sfx/foreman_hotdog.mp3"]
 	selection = Enum.random(samples)
         System.cmd("play", [selection])
         msg = ":greasyhotdogs:"
