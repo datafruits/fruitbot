@@ -133,6 +133,12 @@ defmodule Fruitbot.Commands do
         msg = "FIX THAT BUG"
         {:ok, msg}
 
+      "!burger" ->
+        # shell to play
+        System.cmd("play", ["./sfx/giant_burger.mp3"])
+        msg = "1 giant burger"
+        {:ok, msg}
+
       "!gj" ->
         # shell to play
         System.cmd("play", ["./sfx/gj.mp3"])
