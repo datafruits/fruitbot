@@ -235,52 +235,11 @@ defmodule Fruitbot.Commands do
         msg = "now that's my kinda cheese"
         {:ok, msg}
 
-      "!next" ->
-        next_show = Fruitbot.StreampusherApi.next_show()
-        {:ok, next_show}
-
-      "!latest" ->
-        # return latest archive
-        latest = Fruitbot.StreampusherApi.latest_archive()
-        {:ok, latest}
-
-      "!wiki" ->
-        wiki_link = Fruitbot.StreampusherApi.wiki_search(query)
-        {:ok, wiki_link}
-
-      "!tag" ->
-        result = Fruitbot.StreampusherApi.tag_search(query)
-        {:ok, result}
-
-      "!datafruiter" ->
-        { url, username } = Fruitbot.StreampusherApi.user_search(query)
-        message = "Datafruit found: #{url}"
-        {:ok, message}
-
-      "!bigup" ->
-        query_stripped = String.replace_prefix(query, "@", "")
-        lookup = :ets.lookup(:user_bigups, query_stripped)
-        case lookup do
-          [] ->
-            :ets.insert(:user_bigups, {query_stripped, 1})
-          [{user, count}] ->
-            :ets.insert(:user_bigups, {query_stripped, count + 1})
-        end
-        [{user, count}] = :ets.lookup(:user_bigups, query_stripped)
-        message = ":airhorn: big up #{user} :airhorn: 88888888888888888+++++++++ #{user} has #{count} bigups"
-        { :ok, message }
-
-      # wait this is already a command...
-      # "!hotdogs" ->
-      #   { :ok, message }
-
-      "!hack" ->
-        message = "hack the planet https://github.com/datafruits"
-        { :ok, message }
-
-      "!github" ->
-        message = "hack the planet https://github.com/datafruits"
-        { :ok, message }
+      "!shrimp" ->
+        # shell to play
+        System.cmd("play", ["./sfx/everything_here_is_shrimp.mp3"])
+        msg = "everything here is shrimp"
+        {:ok, msg}
 
       "!sfx" ->
         # can we pull the list of sfx automatically somehow?
@@ -314,6 +273,7 @@ defmodule Fruitbot.Commands do
         !warthog
         !cheese
         !burger
+        !shrimp
         """
 
         {:ok, list}
