@@ -5,10 +5,13 @@ defmodule Fruitbot.CommandHandler do
     IO.inspect(payload)
     [command | tail] = String.split(payload)
     query = Enum.join(tail)
+    # how to pass query????
 
     case find_command(command) do
-      nil -> IO.puts("Command not found")
-      c -> execute_command(c)
+      nil ->
+        IO.puts("Command not found: #{command}")
+        {:error, :bad_command}
+      c -> execute_command(c, query)
     end
   end
 
@@ -22,7 +25,7 @@ defmodule Fruitbot.CommandHandler do
     end)
   end
 
-  defp execute_command(%Fruitbot.Command{handler: handler}) do
-    handler.()
+  defp execute_command(%Fruitbot.Command{handler: handler}, query) do
+    handler.(query)
   end
 end

@@ -103,20 +103,15 @@ defmodule Fruitbot.StreampusherApi do
     current_shrimpos = for shrimpo <- current_shrimpos do
       # calculate time left
       end_at = Kernel.get_in(shrimpo, ["attributes", "end_at"])
-      {:ok, now} = DateTime.now("Etc/UTC")
-      {:ok, then, 0} = DateTime.from_iso8601(end_at)
-      IO.puts now
-      IO.puts then
-      countdown = DateTime.diff(then, now) |> Kernel./(60) |> Kernel.trunc()
-      IO.puts countdown
+      countdown = Fruitbot.Countdown.time_left end_at
       #
       # calculate URL
       slug = Kernel.get_in(shrimpo, ["attributes", "slug"])
       url = "https://datafruits.fm/shrimpos/#{slug}"
-      %{title: shrimpo["attributes"]["title"], url: url, end_at: countdown, image: shrimpo["attributes"]["cover_art_url"]}
+      %{title: shrimpo["attributes"]["title"], url: url, countdown: countdown, end_at: end_at, image: shrimpo["attributes"]["cover_art_url"]}
     end
     shrimpo_strings = Enum.map(current_shrimpos, fn shrimpo ->
-      "#{shrimpo[:title]} ends in #{shrimpo[:end_at]} minutes! :link: #{shrimpo[:url]} #{shrimpo[:image]}"
+      "#{shrimpo[:title]} ends in #{shrimpo[:countdown][:days]} days, #{shrimpo[:countdown][:hours]} hours, #{shrimpo[:countdown][:minutes]} minutes (#{shrimpo[:end_at]})! :link: #{shrimpo[:url]} #{shrimpo[:image]}"
     end)
     "Current Shrimpos: \n #{Enum.join(shrimpo_strings, "\n")}"
   end
@@ -172,12 +167,7 @@ defmodule Fruitbot.StreampusherApi do
 
     data = response["data"]
     start = Kernel.get_in(data, ["attributes", "start"])
-    {:ok, now} = DateTime.now("Etc/UTC")
-    {:ok, then, 0} = DateTime.from_iso8601(start)
-    IO.puts now
-    IO.puts then
-    countdown = DateTime.diff(then, now) |> Kernel./(60) |> Kernel.trunc()
-    IO.puts countdown
+    countdown = Fruitbot.Countdown.time_left start
 
     title = Kernel.get_in(data, ["attributes", "title"])
     host = Kernel.get_in(data, ["attributes", "hosted_by"])
@@ -186,7 +176,7 @@ defmodule Fruitbot.StreampusherApi do
     show_series_slug = Kernel.get_in(data, ["attributes", "show_series_slug"])
     url = "https://datafruits.fm/shows/#{show_series_slug}/episodes/#{slug}"
     image_url = Kernel.get_in(data, ["attributes", "thumb_image_url"])
-    "Next show is #{title}, hosted by #{host}! Beginning in #{countdown} minutes. Description: #{description}. :link: #{url} #{image_url}"
+    "Next show is #{title}, hosted by #{host}! Beginning in #{countdown[:days]} days, #{countdown[:hours]} hours, #{countdown[:minutes]} minutes . Description: #{description}. :link: #{url} #{image_url}"
   end
 
   @spec latest_archive() :: String.t()
@@ -214,8 +204,5 @@ defmodule Fruitbot.StreampusherApi do
           # %HTTPoison.Error{reason: reason} ->
           #   IO.inspect(reason)
       end
-  end
-
-  defp timeLeftFormatted(time) do
   end
 end
