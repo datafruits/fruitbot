@@ -69,15 +69,21 @@ defmodule Fruitbot.Commands do
       {:ok, result}
     end
 
-    def say_shrimpo do
+    def say_shrimpo(query) do
       result = Fruitbot.StreampusherApi.current_shrimpos()
       {:ok, result}
     end
 
     def say_datafruiter(query) do
-      { url, username } = Fruitbot.StreampusherApi.user_search(query)
-      message = "Datafruit found: #{url}"
-      {:ok, message}
+      result = Fruitbot.StreampusherApi.user_search(query)
+      case result do
+        { url, username } ->
+          message = "Datafruit found: #{url}"
+          {:ok, message}
+        { :error, error_message } ->
+          message = error_message
+          {:ok, message}
+      end
     end
 
     def say_bigup(query) do

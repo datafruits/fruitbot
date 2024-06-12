@@ -14,7 +14,8 @@ defmodule Fruitbot.StreampusherApi do
         { url, username }
 
       %HTTPoison.Response{status_code: 404} ->
-        "#{query} not found"
+        error_message = "#{query} not found"
+        { :error, error_message }
 
       _ ->
         "Whoops must have eaten a bad fruit"
