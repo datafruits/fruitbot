@@ -104,11 +104,14 @@ defmodule Fruitbot.Commands do
       message = "hack the planet https://github.com/datafruits"
       { :ok, message }
     end
+
+    def say_help(_query) do
+      message = "type !commands to see list of commands or check out the !wiki for more info"
+      { :ok, message }
+    end
   end
 
   @commands [
-    %Fruitbot.Command{aliases: ["hello", "hi"], handler: &Handlers.say_hello/1},
-    %Fruitbot.Command{aliases: ["bye"], handler: &Handlers.say_goodbye/1},
     %Fruitbot.Command{aliases: ["commands"], handler: &Handlers.say_commands/1},
     %Fruitbot.Command{aliases: ["anysong"], handler: &Handlers.say_anysong/1},
     %Fruitbot.Command{aliases: ["discord"], handler: &Handlers.say_discord/1},
@@ -123,6 +126,7 @@ defmodule Fruitbot.Commands do
     %Fruitbot.Command{aliases: ["datafruiter", "datafruit"], handler: &Handlers.say_datafruiter/1},
     %Fruitbot.Command{aliases: ["bigup", "bigups"], handler: &Handlers.say_bigup/1},
     %Fruitbot.Command{aliases: ["hack", "github"], handler: &Handlers.say_hack/1},
+    %Fruitbot.Command{aliases: ["help"], handler: &Handlers.say_help/1},
   ]
 
   def all_commands(), do: @commands
