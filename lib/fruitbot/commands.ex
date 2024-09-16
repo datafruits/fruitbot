@@ -109,13 +109,18 @@ defmodule Fruitbot.Commands do
       message = "type !commands to see list of commands or check out the !wiki for more info"
       { :ok, message }
     end
+
+    def say_label(_query) do
+      message = "check out the datafruits label releases here https://datafruits.bandcamp.com/"
+      { :ok, message }
+    end
   end
 
   @commands [
     %Fruitbot.Command{aliases: ["commands"], handler: &Handlers.say_commands/1},
     %Fruitbot.Command{aliases: ["anysong"], handler: &Handlers.say_anysong/1},
     %Fruitbot.Command{aliases: ["discord"], handler: &Handlers.say_discord/1},
-    %Fruitbot.Command{aliases: ["donate", "patreon"], handler: &Handlers.say_donate/1},
+    %Fruitbot.Command{aliases: ["donate", "patreon", "subscribe"], handler: &Handlers.say_donate/1},
     %Fruitbot.Command{aliases: ["advice"], handler: &Handlers.say_advice/1},
     %Fruitbot.Command{aliases: ["next"], handler: &Handlers.say_next/1},
     %Fruitbot.Command{aliases: ["np", "now"], handler: &Handlers.say_np/1},
@@ -127,6 +132,7 @@ defmodule Fruitbot.Commands do
     %Fruitbot.Command{aliases: ["bigup", "bigups"], handler: &Handlers.say_bigup/1},
     %Fruitbot.Command{aliases: ["hack", "github"], handler: &Handlers.say_hack/1},
     %Fruitbot.Command{aliases: ["help"], handler: &Handlers.say_help/1},
+    %Fruitbot.Command{aliases: ["label", "bandcamp"], handler: &Handlers.say_label/1},
   ]
 
   def all_commands(), do: @commands

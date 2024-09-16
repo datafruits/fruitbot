@@ -103,9 +103,12 @@ defmodule Fruitbot.Worker do
   # handle disconnects
   @impl Slipstream
   def handle_disconnect(_reason, socket) do
+    IO.puts "disconnected from phoenix"
     case reconnect(socket) do
       {:ok, socket} -> {:ok, socket}
-      {:error, reason} -> {:stop, reason, socket}
+      {:error, reason} ->
+        IO.puts "error reconnecting: #{reason}"
+        {:stop, reason, socket}
     end
   end
 
