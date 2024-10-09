@@ -114,6 +114,11 @@ defmodule Fruitbot.Commands do
       message = "check out the datafruits label releases here https://datafruits.bandcamp.com/"
       { :ok, message }
     end
+
+    def say_coc(_query) do
+      message = "all fruits must abide by the code of conduct https://datafruits.fm/coc"
+      { :ok, message }
+    end
   end
 
   @commands [
@@ -133,6 +138,7 @@ defmodule Fruitbot.Commands do
     %Fruitbot.Command{aliases: ["hack", "github"], handler: &Handlers.say_hack/1},
     %Fruitbot.Command{aliases: ["help"], handler: &Handlers.say_help/1},
     %Fruitbot.Command{aliases: ["label", "bandcamp"], handler: &Handlers.say_label/1},
+    %Fruitbot.Command{aliases: ["coc", "conduct"], handler: &Handlers.say_coc/1},
   ]
 
   def all_commands(), do: @commands
