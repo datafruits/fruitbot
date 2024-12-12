@@ -1,6 +1,6 @@
 defmodule Fruitbot.Worker do
   use Slipstream,
-    restart: :temporary
+    restart: :permanent
 
   require Logger
 
@@ -103,11 +103,11 @@ defmodule Fruitbot.Worker do
   # handle disconnects
   @impl Slipstream
   def handle_disconnect(_reason, socket) do
-    IO.puts "disconnected from phoenix"
+    IO.puts "DISCONNECTED ------------------ disconnected from phoenix"
     case reconnect(socket) do
       {:ok, socket} -> {:ok, socket}
       {:error, reason} ->
-        IO.puts "error reconnecting: #{reason}"
+        IO.puts "ERROR -------------------------------------- error reconnecting: #{reason}"
         {:stop, reason, socket}
     end
   end
