@@ -135,7 +135,10 @@ defmodule Fruitbot.StreampusherApi do
           #   IO.inspect(reason)
       end
 
+    # handle renegade live case
+    IO.inspect(response)
     data = response["data"]
+    IO.inspect(data)
     title = Kernel.get_in(data, ["attributes", "title"])
     host = Kernel.get_in(data, ["attributes", "hosted_by"])
     description = Kernel.get_in(data, ["attributes", "description"])
@@ -144,6 +147,7 @@ defmodule Fruitbot.StreampusherApi do
     show_series_slug = Kernel.get_in(data, ["attributes", "show_series_slug"])
     url = "https://datafruits.fm/shows/#{show_series_slug}/episodes/#{slug}"
     image_url = Kernel.get_in(data, ["attributes", "thumb_image_url"])
+    archive_published = Kernel.get_in(data, ["attributes", "archive_published"])
 
     "Current show is #{title}, hosted by #{host}! Description: #{description}. :link: #{url} #{image_url}"
   end

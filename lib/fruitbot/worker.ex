@@ -6,18 +6,30 @@ defmodule Fruitbot.Worker do
 
   @topic "rooms:lobby"
 
+  @interval 120 * 60 * 1000
+
   def start_link(args) do
     Slipstream.start_link(__MODULE__, args, name: __MODULE__)
   end
 
   @impl Slipstream
   def init(config) do
+    Process.send_after(self(), :send_periodic_message, @interval)
     {:ok, connect!(config)}
   end
 
   @impl Slipstream
   def handle_connect(socket) do
     IO.puts('handle_connect')
+
+    # socket =
+    #   if Map.get(socket.assigns, :interval_started) do
+    #     socket
+    #   else
+    #     :timer.send_interval(@interval, :send_periodic_message)
+    #     assign(socket, :interval_started, true)
+    #   end
+
     {:ok, join(socket, @topic)}
   end
 
@@ -27,8 +39,23 @@ defmodule Fruitbot.Worker do
     avatar_url = "https://cdn.discordapp.com/avatars/961310729644957786/888d15c8ee637d0793c8a733ca1dd981.webp?size=80"
     push(socket, @topic, "authorize", %{user: "coach", avatarUrl: avatar_url})
     IO.puts('handle_join')
+
     {:ok, socket}
   end
+
+  @impl true
+  def handle_info(:send_periodic_message, socket) do
+    # Customize this message however you want
+    msg =
+        "Enjoying the stream, Brendon? The best way to support is with a monthly donation on Patreon. Learn more at https://datafruits.fm/support. Or you could give :duckle: some fruit tickets"
+    send_message(socket, msg)
+
+    # Schedule the next one
+    Process.send_after(self(), :send_periodic_message, @interval)
+
+    {:noreply, socket}
+  end
+
 
   @impl true
   def handle_cast({:send_discord_msg, msg}, socket) do

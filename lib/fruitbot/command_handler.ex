@@ -3,15 +3,20 @@ defmodule Fruitbot.CommandHandler do
 
   def handle_command(payload) do
     IO.inspect(payload)
-    [command | tail] = String.split(payload)
-    query = Enum.join(tail)
-    # how to pass query????
+    if String.starts_with?(payload, "!") do
+      # Drop the leading "!" before splitting
+      [command | tail] = payload |> String.trim_leading("!") |> String.split()
 
-    case find_command(command) do
-      nil ->
-        IO.puts("Command not found: #{command}")
-        {:error, :bad_command}
-      c -> execute_command(c, query)
+      # [command | tail] = String.split(payload)
+      query = Enum.join(tail)
+      # how to pass query????
+
+      case find_command(command) do
+        nil ->
+          IO.puts("Command not found: #{command}")
+          {:error, :bad_command}
+        c -> execute_command(c, query)
+      end
     end
   end
 
