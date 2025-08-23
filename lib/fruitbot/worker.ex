@@ -108,7 +108,7 @@ defmodule Fruitbot.Worker do
 
       # case Fruitbot.Commands.handle_message(message["body"]) do
       # ignore bots
-      if(message["role"] != "bot") do
+        if(message["role"] != "bot" && String.starts_with?(message["body"], "!")) do
         case Fruitbot.CommandHandler.handle_command(message["body"]) do
           {:ok, message} ->
             send_message(socket, message)
