@@ -7,6 +7,7 @@ defmodule Fruitbot.Worker do
   @topic "rooms:lobby"
 
   @interval 120 * 60 * 1000
+  @backup_interval 30 * 60 * 1000  # Backup every 30 minutes
 
   def start_link(args) do
     Slipstream.start_link(__MODULE__, args, name: __MODULE__)
@@ -15,6 +16,7 @@ defmodule Fruitbot.Worker do
   @impl Slipstream
   def init(config) do
     Process.send_after(self(), :send_periodic_message, @interval)
+    Process.send_after(self(), :backup_model, @backup_interval)
     {:ok, connect!(config)}
   end
 
@@ -53,6 +55,17 @@ defmodule Fruitbot.Worker do
     # Schedule the next one
     Process.send_after(self(), :send_periodic_message, @interval)
 
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(:backup_model, socket) do
+    IO.puts("Creating periodic backup of markov model...")
+    Fruitbot.MarkovBackup.create_backup()
+    
+    # Schedule the next backup
+    Process.send_after(self(), :backup_model, @backup_interval)
+    
     {:noreply, socket}
   end
 
@@ -114,9 +127,12 @@ defmodule Fruitbot.Worker do
             send_message(socket, message)
 
           {:error, :bad_command} ->
-            {:ok, model} = Markov.load("./coach_model", sanitize_tokens: true, store_log: [:train])
-            :ok = Markov.train(model, message["body"])
-            Markov.unload(model)
+            Fruitbot.MarkovBackup.safe_model_operation(fn ->
+              {:ok, model} = Markov.load("./coach_model", sanitize_tokens: true, store_log: [:train])
+              :ok = Markov.train(model, message["body"])
+              Markov.unload(model)
+              :ok
+            end)
             # noop
             IO.puts("Coach doesn't understand this command. Try another!")
             :ignore
