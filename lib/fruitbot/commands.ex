@@ -34,12 +34,14 @@ defmodule Fruitbot.Commands do
     end
 
     def say_advice(_query) do
-     {:ok, model} = Markov.load("./coach_model", sanitize_tokens: true, store_log: [:train])
-     :ok = Markov.configure(model, shift_probabilities: true)
+      Fruitbot.MarkovBackup.safe_model_operation(fn ->
+        {:ok, model} = Markov.load("./coach_model", sanitize_tokens: true, store_log: [:train])
+        :ok = Markov.configure(model, shift_probabilities: true)
 
-     {:ok, msg} = Markov.generate_text(model)
-     Markov.unload(model)
-     {:ok, msg}
+        {:ok, msg} = Markov.generate_text(model)
+        Markov.unload(model)
+        {:ok, msg}
+      end)
     end
 
     def say_next(_query) do
@@ -119,6 +121,25 @@ defmodule Fruitbot.Commands do
       message = "all fruits must abide by the code of conduct https://datafruits.fm/coc"
       { :ok, message }
     end
+
+    def say_hydrate(_query) do
+      message = "hey everyone make sure youre drinking enough water and taking time for yourselves and eating some nutritious food and taking breaks from social media coz i care abt you and i want you to be happy n healthy"
+      { :ok, message }
+    end
+
+    def say_restore_model(_query) do
+      case Fruitbot.MarkovBackup.restore_latest_backup() do
+        {:ok, backup_path} ->
+          message = "Model restored from backup: #{backup_path}"
+          {:ok, message}
+        {:error, :no_backups} ->
+          message = "No model backups available to restore from"
+          {:ok, message}
+        {:error, reason} ->
+          message = "Failed to restore model: #{reason}"
+          {:ok, message}
+      end
+    end
   end
 
   @commands [
@@ -139,6 +160,8 @@ defmodule Fruitbot.Commands do
     %Fruitbot.Command{aliases: ["help"], handler: &Handlers.say_help/1},
     %Fruitbot.Command{aliases: ["label", "bandcamp"], handler: &Handlers.say_label/1},
     %Fruitbot.Command{aliases: ["coc", "conduct"], handler: &Handlers.say_coc/1},
+    %Fruitbot.Command{aliases: ["hydrate"], handler: &Handlers.say_hydrate/1},
+    %Fruitbot.Command{aliases: ["restore-model"], handler: &Handlers.say_restore_model/1},
   ]
 
   def all_commands(), do: @commands
