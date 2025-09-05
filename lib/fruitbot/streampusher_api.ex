@@ -135,9 +135,34 @@ defmodule Fruitbot.StreampusherApi do
           #   IO.inspect(reason)
       end
 
-    # handle renegade live case
+    # TODO handle renegade live case (???)
+      #
+    # {"title"=>"LIVE -- sharked_up",
+    # "current_source"=>"live_dj",
+    # "show_series_id"=>"earthworks",
+    # "episode_id"=>"earthworks-09032025"}
     IO.inspect(response)
-    data = response["data"]
+
+    show_series_id = response["show_series_id"]
+    episode_id = response["episode_id"]
+    episode_url = "https://datafruits.streampusher.com/api/show_series/#{show_series_id}/episodes/#{episode_id}.json"
+    IO.inspect(episode_url)
+    episode_response = case HTTPoison.get!(episode_url) do
+      %HTTPoison.Response{status_code: 200, body: body} ->
+        Jason.decode!(body)
+
+      # not sure it seems the API doesn't return a 404 when search result not found, just an empty list
+      %HTTPoison.Response{status_code: 404} ->
+        "Not found"
+
+      _ ->
+        "Whoops must have eaten a bad fruit"
+
+        # %HTTPoison.Error{reason: reason} ->
+        #   IO.inspect(reason)
+    end
+    IO.inspect(episode_response)
+    data = episode_response["data"]
     IO.inspect(data)
     title = Kernel.get_in(data, ["attributes", "title"])
     host = Kernel.get_in(data, ["attributes", "hosted_by"])
@@ -147,7 +172,7 @@ defmodule Fruitbot.StreampusherApi do
     show_series_slug = Kernel.get_in(data, ["attributes", "show_series_slug"])
     url = "https://datafruits.fm/shows/#{show_series_slug}/episodes/#{slug}"
     image_url = Kernel.get_in(data, ["attributes", "thumb_image_url"])
-    archive_published = Kernel.get_in(data, ["attributes", "archive_published"])
+    # archive_published = Kernel.get_in(data, ["attributes", "archive_published"])
 
     "Current show is #{title}, hosted by #{host}! Description: #{description}. :link: #{url} #{image_url}"
   end
