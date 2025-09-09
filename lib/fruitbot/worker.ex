@@ -62,19 +62,41 @@ defmodule Fruitbot.Worker do
     IO.puts("sending discord msg to datafruits chat...")
     IO.puts(inspect(socket))
     IO.puts(inspect(msg.author))
-    avatar_url = Nostrum.Struct.User.avatar_url(msg.author)
+    IO.puts(inspect(msg))
 
-    # TODO msg.author.username is pulling from permanent discord username, not datafruits-specific username
-    if msg.sticker_items do
-      sticker_id = List.first(msg.sticker_items).id
-      content ="https://cdn.discordapp.com/stickers/#{sticker_id}.png"
-      message = "New msg in discord from #{msg.author.username}: #{content}"
-      send_message(socket, message, avatar_url)
-    else
-      content = msg.content
-      message = "New msg in discord from #{msg.author.username}: #{content}"
-      send_message(socket, message, avatar_url)
+    avatar_url = Nostrum.Struct.User.avatar_url(msg.author)
+    username = msg.author.username
+
+    cond do
+      # Stickers take priority if present
+      msg.sticker_items && msg.sticker_items != [] ->
+        sticker_id = List.first(msg.sticker_items).id
+        content = "https://cdn.discordapp.com/stickers/#{sticker_id}.png"
+        message = "New msg in discord from #{username}: #{content}"
+        send_message(socket, message, avatar_url)
+
+      # Attachments (images, files, etc.)
+      msg.attachments && msg.attachments != [] ->
+        # Collect all attachment URLs
+        urls = Enum.map(msg.attachments, fn att -> att.url end)
+        # Join with line breaks or spaces
+        urls_text = Enum.join(urls, "\n")
+        content =
+          case msg.content do
+            "" -> urls_text
+            text -> text <> "\n" <> urls_text
+          end
+
+        message = "New msg in discord from #{username}: #{content}"
+        send_message(socket, message, avatar_url)
+
+      # Fallback: just text content
+      true ->
+        content = msg.content
+        message = "New msg in discord from #{username}: #{content}"
+        send_message(socket, message, avatar_url)
     end
+
     {:noreply, socket}
   end
 
