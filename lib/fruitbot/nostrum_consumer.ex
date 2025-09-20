@@ -2,8 +2,6 @@ defmodule Fruitbot.NostrumConsumer do
   @just_a_website_channel_id 918577903258730506
   @behaviour Nostrum.Consumer
 
-  alias Nostrum.Api
-
   def handle_event({:MESSAGE_CREATE, msg, ws_state}) do
     IO.inspect(ws_state)
     IO.inspect msg
