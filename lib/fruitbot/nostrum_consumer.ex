@@ -1,6 +1,7 @@
 defmodule Fruitbot.NostrumConsumer do
+  @behaviour Nostrum.Consumer
+
   @just_a_website_channel_id 918577903258730506
-  use Nostrum.Consumer
 
   # alias Nostrum.Api
 
