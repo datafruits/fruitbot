@@ -17,12 +17,24 @@ defmodule Fruitbot.Supervisor do
 
   @impl true
   def init(:ok) do
-    [bot_config] = Application.fetch_env!(:fruitbot, :bots)
+    [_bot_config] = Application.fetch_env!(:fruitbot, :bots)
+
+    # Bot options for new Nostrum API
+    bot_options = %{
+      name: :fruitbot,
+      consumer: Fruitbot.NostrumConsumer,
+      intents: [
+        :guilds,
+        :message_content,
+        :guild_messages
+      ],
+      wrapped_token: fn -> System.get_env("DISCORD_TOKEN") end
+    }
 
     children = [
       Plug.Cowboy.child_spec(scheme: :http, plug: Fruitbot.Router, options: [port: get_port()]),
       {Fruitbot.Worker, uri: System.get_env("CHAT_URL")},
-      {Fruitbot.NostrumConsumer, name: Fruitbot.NostrumConsumer},
+      {Nostrum.Bot, bot_options},
       # {TMI.Supervisor, bot_config}
     ]
 
