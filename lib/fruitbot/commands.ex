@@ -33,15 +33,15 @@ defmodule Fruitbot.Commands do
       {:ok, msg}
     end
 
-    def say_advice(_query) do
-     {:ok, model} = Markov.load("./coach_model", sanitize_tokens: true, store_log: [:train])
-     :ok = Markov.configure(model, shift_probabilities: true)
-
-     {:ok, msg} = Markov.generate_text(model)
-     Markov.unload(model)
-     {:ok, msg}
-    end
-
+    # def say_advice(_query) do
+    #  {:ok, model} = Markov.load("./coach_model", sanitize_tokens: true, store_log: [:train])
+    #  :ok = Markov.configure(model, shift_probabilities: true)
+    #
+    #  {:ok, msg} = Markov.generate_text(model)
+    #  Markov.unload(model)
+    #  {:ok, msg}
+    # end
+    #
     def say_next(_query) do
       next_show = Fruitbot.StreampusherApi.next_show()
       {:ok, next_show}
@@ -126,7 +126,7 @@ defmodule Fruitbot.Commands do
     %Fruitbot.Command{aliases: ["anysong"], handler: &Handlers.say_anysong/1},
     %Fruitbot.Command{aliases: ["discord"], handler: &Handlers.say_discord/1},
     %Fruitbot.Command{aliases: ["donate", "patreon", "subscribe"], handler: &Handlers.say_donate/1},
-    %Fruitbot.Command{aliases: ["advice"], handler: &Handlers.say_advice/1},
+    # %Fruitbot.Command{aliases: ["advice"], handler: &Handlers.say_advice/1},
     %Fruitbot.Command{aliases: ["next"], handler: &Handlers.say_next/1},
     %Fruitbot.Command{aliases: ["np", "now"], handler: &Handlers.say_np/1},
     %Fruitbot.Command{aliases: ["latest"], handler: &Handlers.say_latest/1},

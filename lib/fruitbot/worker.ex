@@ -136,9 +136,9 @@ defmodule Fruitbot.Worker do
             send_message(socket, message)
 
           {:error, :bad_command} ->
-            {:ok, model} = Markov.load("./coach_model", sanitize_tokens: true, store_log: [:train])
-            :ok = Markov.train(model, message["body"])
-            Markov.unload(model)
+            # {:ok, model} = Markov.load("./coach_model", sanitize_tokens: true, store_log: [:train])
+            # :ok = Markov.train(model, message["body"])
+            # Markov.unload(model)
             # noop
             IO.puts("Coach doesn't understand this command. Try another!")
             :ignore
