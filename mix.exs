@@ -30,8 +30,7 @@ defmodule Fruitbot.MixProject do
       {:httpoison, "~> 2.0"},
       {:tmi, git: "https://github.com/mcfiredrill/tmi.ex" },
       {:castore, "~> 1.0"},
-      {:persistent_ets, "~> 0.1.0"},
-      {:markov, "~> 4.0"}
+      {:persistent_ets, "~> 0.1.0"}
     ]
   end
 end
