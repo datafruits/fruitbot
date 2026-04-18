@@ -117,6 +117,12 @@ defmodule Fruitbot.Commands do
       message = "all fruits must abide by the code of conduct https://datafruits.fm/coc"
       { :ok, message }
     end
+
+    def say_backfill(_query) do
+      channel_id = 918_577_903_258_730_506
+      {:ok, _pid} = Fruitbot.MarkovChain.backfill(channel_id)
+      {:ok, "Backfill started! Reading old Discord messages to train the Markov chain. This may take a few minutes."}
+    end
   end
 
   @commands [
@@ -137,6 +143,7 @@ defmodule Fruitbot.Commands do
     %Fruitbot.Command{aliases: ["help"], handler: &Handlers.say_help/1},
     %Fruitbot.Command{aliases: ["label", "bandcamp"], handler: &Handlers.say_label/1},
     %Fruitbot.Command{aliases: ["coc", "conduct"], handler: &Handlers.say_coc/1},
+    %Fruitbot.Command{aliases: ["backfill"], handler: &Handlers.say_backfill/1},
   ]
 
   def all_commands(), do: @commands

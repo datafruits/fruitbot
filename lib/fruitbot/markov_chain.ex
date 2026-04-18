@@ -45,6 +45,22 @@ defmodule Fruitbot.MarkovChain do
   end
 
   @doc """
+  Backfill the Markov chain by reading old messages from a Discord channel.
+
+  Spawns a background task that paginates through the channel history,
+  filters out bots and commands, and trains the model on each message.
+
+  ## Example
+
+      Fruitbot.MarkovChain.backfill(918577903258730506)
+
+  """
+  @spec backfill(non_neg_integer()) :: {:ok, pid()}
+  def backfill(channel_id) do
+    Fruitbot.DiscordBackfill.run(channel_id)
+  end
+
+  @doc """
   Manually save the current model to disk.
   """
   @spec save() :: :ok
