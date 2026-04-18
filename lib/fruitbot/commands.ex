@@ -118,10 +118,15 @@ defmodule Fruitbot.Commands do
       { :ok, message }
     end
 
-    def say_backfill(_query) do
-      channel_id = 918_577_903_258_730_506
+    def say_backfill(query) do
+      channel_id =
+        case Integer.parse(String.trim(query)) do
+          {id, ""} -> id
+          _ -> 918_577_903_258_730_506
+        end
+
       {:ok, _pid} = Fruitbot.MarkovChain.backfill(channel_id)
-      {:ok, "Backfill started! Reading old Discord messages to train the Markov chain. This may take a few minutes."}
+      {:ok, "Backfill started for channel #{channel_id}! Reading old Discord messages to train the Markov chain. This may take a few minutes."}
     end
   end
 
