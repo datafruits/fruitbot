@@ -18,7 +18,7 @@ defmodule Fruitbot.MarkovChain do
   # Save every 5 minutes (in milliseconds)
   @save_interval_ms 5 * 60 * 1_000
 
-  @model_path System.get_env("MARKOV_MODEL_PATH") || "markov_model.txt"
+  @default_model_path "markov_model.txt"
 
   # ── Client API ──────────────────────────────────────────────────────
 
@@ -100,7 +100,7 @@ defmodule Fruitbot.MarkovChain do
     Process.send_after(self(), :save, @save_interval_ms)
   end
 
-  defp model_path, do: @model_path
+  defp model_path, do: System.get_env("MARKOV_MODEL_PATH") || @default_model_path
 
   defp load_model do
     case File.read(model_path()) do
