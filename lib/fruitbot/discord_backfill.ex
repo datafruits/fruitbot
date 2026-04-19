@@ -46,9 +46,7 @@ defmodule Fruitbot.DiscordBackfill do
   end
 
   defp fetch_page(channel_id, before_id, count) do
-    opts = build_opts(before_id)
-
-    case Nostrum.Api.get_channel_messages(channel_id, @page_size, opts) do
+    case fetch_messages(channel_id, before_id) do
       {:ok, []} ->
         count
 
@@ -73,8 +71,11 @@ defmodule Fruitbot.DiscordBackfill do
     end
   end
 
-  defp build_opts(nil), do: %{}
-  defp build_opts(before_id), do: %{before: before_id}
+  defp fetch_messages(channel_id, nil),
+    do: Nostrum.Api.get_channel_messages(channel_id, @page_size)
+
+  defp fetch_messages(channel_id, before_id),
+    do: Nostrum.Api.get_channel_messages(channel_id, @page_size, %{before: before_id})
 
   defp trainable?(msg) do
     not bot?(msg) and
