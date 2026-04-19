@@ -126,7 +126,7 @@ defmodule Fruitbot.Commands do
         end
 
       {:ok, _pid} = Fruitbot.MarkovChain.backfill(channel_id)
-      {:ok, "Backfill started for channel #{channel_id}! Reading old Discord messages to train the Markov chain. This may take a few minutes."}
+      {:ok, "Backfill started for channel #{channel_id}! Training on up to 5,000 messages. This may take a few minutes."}
     end
   end
 

@@ -18,19 +18,24 @@ defmodule Fruitbot.DiscordBackfill do
   @page_size 100
   # Pause between pages to stay well within Discord rate limits
   @rate_limit_ms 1_000
+  # Default cap on how many messages to train on (not total fetched)
+  @default_max_messages 5_000
 
   @doc """
   Asynchronously backfill the Markov chain from a Discord channel's history.
 
   Spawns a `Task` so the caller is not blocked.
   Returns `{:ok, pid}` of the background task.
+
+  An optional `max_messages` argument caps how many trainable messages are
+  ingested (default: #{@default_max_messages}).
   """
-  @spec run(non_neg_integer()) :: {:ok, pid()}
-  def run(channel_id) do
+  @spec run(non_neg_integer(), non_neg_integer()) :: {:ok, pid()}
+  def run(channel_id, max_messages \\ @default_max_messages) do
     task =
       Task.start(fn ->
-        Logger.info("DiscordBackfill: starting backfill for channel #{channel_id}")
-        count = fetch_all(channel_id)
+        Logger.info("DiscordBackfill: starting backfill for channel #{channel_id} (max #{max_messages} messages)")
+        count = fetch_all(channel_id, max_messages)
         Logger.info("DiscordBackfill: finished — trained on #{count} messages")
 
         # Persist the model immediately after bulk ingestion
@@ -41,11 +46,16 @@ defmodule Fruitbot.DiscordBackfill do
   end
 
   @doc false
-  def fetch_all(channel_id) do
-    fetch_page(channel_id, nil, 0)
+  def fetch_all(channel_id, max_messages \\ @default_max_messages) do
+    fetch_page(channel_id, nil, 0, max_messages)
   end
 
-  defp fetch_page(channel_id, before_id, count) do
+  defp fetch_page(_channel_id, _before_id, count, max) when count >= max do
+    Logger.info("DiscordBackfill: reached message limit (#{max}), stopping at #{count} messages")
+    count
+  end
+
+  defp fetch_page(channel_id, before_id, count, max) do
     case fetch_messages(channel_id, before_id) do
       {:ok, []} ->
         count
@@ -53,17 +63,26 @@ defmodule Fruitbot.DiscordBackfill do
       {:ok, messages} ->
         trainable_msgs = Enum.filter(messages, &trainable?/1)
 
-        Enum.each(trainable_msgs, fn msg ->
+        # Only train up to the remaining budget
+        remaining = max - count
+        msgs_to_train = Enum.take(trainable_msgs, remaining)
+
+        Enum.each(msgs_to_train, fn msg ->
           Fruitbot.MarkovChain.train(msg.content)
         end)
 
-        new_count = count + length(trainable_msgs)
+        new_count = count + length(msgs_to_train)
         oldest_id = messages |> Enum.map(& &1.id) |> Enum.min()
 
-        Logger.debug("DiscordBackfill: fetched #{length(messages)} messages, trained #{new_count} total so far")
+        Logger.debug("DiscordBackfill: fetched #{length(messages)} messages, trained #{new_count}/#{max} so far")
 
-        Process.sleep(@rate_limit_ms)
-        fetch_page(channel_id, oldest_id, new_count)
+        if new_count >= max do
+          Logger.info("DiscordBackfill: reached message limit (#{max}), stopping at #{new_count} messages")
+          new_count
+        else
+          Process.sleep(@rate_limit_ms)
+          fetch_page(channel_id, oldest_id, new_count, max)
+        end
 
       {:error, reason} ->
         Logger.warning("DiscordBackfill: API error — #{inspect(reason)}, stopping at #{count} messages")
