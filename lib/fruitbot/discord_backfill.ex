@@ -72,10 +72,10 @@ defmodule Fruitbot.DiscordBackfill do
   end
 
   defp fetch_messages(channel_id, nil),
-    do: Nostrum.Api.get_channel_messages(channel_id, @page_size)
+    do: Nostrum.Api.get_channel_messages(channel_id, @page_size, {})
 
   defp fetch_messages(channel_id, before_id),
-    do: Nostrum.Api.get_channel_messages(channel_id, @page_size, %{before: before_id})
+    do: Nostrum.Api.get_channel_messages(channel_id, @page_size, {:before, before_id})
 
   defp trainable?(msg) do
     not bot?(msg) and
