@@ -128,11 +128,11 @@ defmodule Fruitbot.Commands do
       {:ok, _pid} = Fruitbot.MarkovChain.backfill(channel_id)
       {:ok, "Backfill started for channel #{channel_id}! Training on up to 5,000 messages. This may take a few minutes."}
     end
-  end
 
-  def say_block_factory(_query) do
+    def say_block_factory(_query) do
       message = "wishlist professor bringoo's big dumb block factory on steam https://store.steampowered.com/app/4574960/Prof_Bringoos_Big_Dumb_Block_Factory/"
       { :ok, message }
+    end
   end
 
   @commands [
@@ -154,7 +154,7 @@ defmodule Fruitbot.Commands do
     %Fruitbot.Command{aliases: ["label", "bandcamp"], handler: &Handlers.say_label/1},
     %Fruitbot.Command{aliases: ["coc", "conduct"], handler: &Handlers.say_coc/1},
     %Fruitbot.Command{aliases: ["backfill"], handler: &Handlers.say_backfill/1},
-    %Fruitbot.Command{aliases: ["bringo", "blocks"], handler: &Handlers.say_block_factory/1},
+    %Fruitbot.Command{aliases: ["bringoo", "blocks"], handler: &Handlers.say_block_factory/1},
     # %Fruitbot.Command{aliases: ["burgerzone", "bz"], handler: &Handlers.say_burgerzone/1},
   ]
 
