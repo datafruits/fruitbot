@@ -27,6 +27,7 @@ defmodule Fruitbot.Supervisor do
 
     children = [
       Plug.Cowboy.child_spec(scheme: :http, plug: Fruitbot.Router, options: [port: get_port()]),
+      Fruitbot.MarkovChain,
       {Fruitbot.Worker, uri: System.get_env("CHAT_URL")},
       {Nostrum.Bot, bot_options},
       # {TMI.Supervisor, bot_config}

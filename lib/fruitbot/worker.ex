@@ -130,18 +130,19 @@ defmodule Fruitbot.Worker do
 
       # case Fruitbot.Commands.handle_message(message["body"]) do
       # ignore bots
-        if(message["role"] != "bot" && String.starts_with?(message["body"], "!")) do
-        case Fruitbot.CommandHandler.handle_command(message["body"]) do
-          {:ok, message} ->
-            send_message(socket, message)
+        if message["role"] != "bot" do
+        if String.starts_with?(message["body"], "!") do
+          case Fruitbot.CommandHandler.handle_command(message["body"]) do
+            {:ok, message} ->
+              send_message(socket, message)
 
-          {:error, :bad_command} ->
-            # {:ok, model} = Markov.load("./coach_model", sanitize_tokens: true, store_log: [:train])
-            # :ok = Markov.train(model, message["body"])
-            # Markov.unload(model)
-            # noop
-            IO.puts("Coach doesn't understand this command. Try another!")
-            :ignore
+            {:error, :bad_command} ->
+              IO.puts("Coach doesn't understand this command. Try another!")
+              :ignore
+          end
+        else
+          # Ingest non-command chat messages into the Markov chain
+          Fruitbot.MarkovChain.train(message["body"])
         end
       end
     end

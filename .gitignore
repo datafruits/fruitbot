@@ -26,3 +26,6 @@ fruitbot-*.tar
 /tmp/
 
 .env
+
+# Markov chain model persistence file
+markov_model.txt

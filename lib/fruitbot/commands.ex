@@ -33,15 +33,13 @@ defmodule Fruitbot.Commands do
       {:ok, msg}
     end
 
-    # def say_advice(_query) do
-    #  {:ok, model} = Markov.load("./coach_model", sanitize_tokens: true, store_log: [:train])
-    #  :ok = Markov.configure(model, shift_probabilities: true)
-    #
-    #  {:ok, msg} = Markov.generate_text(model)
-    #  Markov.unload(model)
-    #  {:ok, msg}
-    # end
-    #
+    def say_advice(_query) do
+      case Fruitbot.MarkovChain.generate() do
+        {:ok, msg} -> {:ok, msg}
+        {:error, :not_enough_data} -> {:ok, "I haven't heard enough chat yet to give advice!"}
+      end
+    end
+
     def say_next(_query) do
       next_show = Fruitbot.StreampusherApi.next_show()
       {:ok, next_show}
@@ -119,6 +117,17 @@ defmodule Fruitbot.Commands do
       message = "all fruits must abide by the code of conduct https://datafruits.fm/coc"
       { :ok, message }
     end
+
+    def say_backfill(query) do
+      channel_id =
+        case Integer.parse(String.trim(query)) do
+          {id, ""} -> id
+          _ -> 918_577_903_258_730_506
+        end
+
+      {:ok, _pid} = Fruitbot.MarkovChain.backfill(channel_id)
+      {:ok, "Backfill started for channel #{channel_id}! Training on up to 5,000 messages. This may take a few minutes."}
+    end
   end
 
   @commands [
@@ -126,7 +135,7 @@ defmodule Fruitbot.Commands do
     %Fruitbot.Command{aliases: ["anysong"], handler: &Handlers.say_anysong/1},
     %Fruitbot.Command{aliases: ["discord"], handler: &Handlers.say_discord/1},
     %Fruitbot.Command{aliases: ["donate", "patreon", "subscribe"], handler: &Handlers.say_donate/1},
-    # %Fruitbot.Command{aliases: ["advice"], handler: &Handlers.say_advice/1},
+    %Fruitbot.Command{aliases: ["advice"], handler: &Handlers.say_advice/1},
     %Fruitbot.Command{aliases: ["next"], handler: &Handlers.say_next/1},
     %Fruitbot.Command{aliases: ["np", "now"], handler: &Handlers.say_np/1},
     %Fruitbot.Command{aliases: ["latest"], handler: &Handlers.say_latest/1},
@@ -139,6 +148,7 @@ defmodule Fruitbot.Commands do
     %Fruitbot.Command{aliases: ["help"], handler: &Handlers.say_help/1},
     %Fruitbot.Command{aliases: ["label", "bandcamp"], handler: &Handlers.say_label/1},
     %Fruitbot.Command{aliases: ["coc", "conduct"], handler: &Handlers.say_coc/1},
+    %Fruitbot.Command{aliases: ["backfill"], handler: &Handlers.say_backfill/1},
   ]
 
   def all_commands(), do: @commands
