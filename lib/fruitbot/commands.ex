@@ -26,6 +26,10 @@ defmodule Fruitbot.Commands do
       {:ok, msg}
     end
 
+    def say_studio(_query) do
+      {:ok, "https://datafruits.fm/user/studio"}
+    end
+
     def say_donate(_query) do
       msg =
         "Enjoying the stream? The best way to support is with a monthly donation on Patreon. Learn more at https://datafruits.fm/support."
@@ -139,6 +143,7 @@ defmodule Fruitbot.Commands do
     %Fruitbot.Command{aliases: ["commands"], handler: &Handlers.say_commands/1},
     %Fruitbot.Command{aliases: ["anysong"], handler: &Handlers.say_anysong/1},
     %Fruitbot.Command{aliases: ["discord"], handler: &Handlers.say_discord/1},
+    %Fruitbot.Command{aliases: ["studio"], handler: &Handlers.say_studio/1},
     %Fruitbot.Command{aliases: ["donate", "patreon", "subscribe"], handler: &Handlers.say_donate/1},
     %Fruitbot.Command{aliases: ["advice"], handler: &Handlers.say_advice/1},
     %Fruitbot.Command{aliases: ["next"], handler: &Handlers.say_next/1},
