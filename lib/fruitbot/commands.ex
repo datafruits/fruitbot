@@ -26,6 +26,10 @@ defmodule Fruitbot.Commands do
       {:ok, msg}
     end
 
+    def say_studio(_query) do
+      {:ok, "https://datafruits.fm/user/studio"}
+    end
+
     def say_donate(_query) do
       msg =
         "Enjoying the stream? The best way to support is with a monthly donation on Patreon. Learn more at https://datafruits.fm/support."
@@ -128,12 +132,18 @@ defmodule Fruitbot.Commands do
       {:ok, _pid} = Fruitbot.MarkovChain.backfill(channel_id)
       {:ok, "Backfill started for channel #{channel_id}! Training on up to 5,000 messages. This may take a few minutes."}
     end
+
+    def say_block_factory(_query) do
+      message = "wishlist professor bringoo's big dumb block factory on steam https://store.steampowered.com/app/4574960/Prof_Bringoos_Big_Dumb_Block_Factory/"
+      { :ok, message }
+    end
   end
 
   @commands [
     %Fruitbot.Command{aliases: ["commands"], handler: &Handlers.say_commands/1},
     %Fruitbot.Command{aliases: ["anysong"], handler: &Handlers.say_anysong/1},
     %Fruitbot.Command{aliases: ["discord"], handler: &Handlers.say_discord/1},
+    %Fruitbot.Command{aliases: ["studio"], handler: &Handlers.say_studio/1},
     %Fruitbot.Command{aliases: ["donate", "patreon", "subscribe"], handler: &Handlers.say_donate/1},
     %Fruitbot.Command{aliases: ["advice"], handler: &Handlers.say_advice/1},
     %Fruitbot.Command{aliases: ["next"], handler: &Handlers.say_next/1},
@@ -149,6 +159,8 @@ defmodule Fruitbot.Commands do
     %Fruitbot.Command{aliases: ["label", "bandcamp"], handler: &Handlers.say_label/1},
     %Fruitbot.Command{aliases: ["coc", "conduct"], handler: &Handlers.say_coc/1},
     %Fruitbot.Command{aliases: ["backfill"], handler: &Handlers.say_backfill/1},
+    %Fruitbot.Command{aliases: ["bringoo", "blocks"], handler: &Handlers.say_block_factory/1},
+    # %Fruitbot.Command{aliases: ["burgerzone", "bz"], handler: &Handlers.say_burgerzone/1},
   ]
 
   def all_commands(), do: @commands
