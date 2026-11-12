@@ -36,7 +36,7 @@ defmodule Fruitbot.Worker do
   @impl Slipstream
   @spec handle_join(<<_::88>>, any, Slipstream.Socket.t()) :: {:ok, Slipstream.Socket.t()}
   def handle_join(@topic, _join_response, socket) do
-    avatar_url = "https://cdn.discordapp.com/avatars/961310729644957786/888d15c8ee637d0793c8a733ca1dd981.webp?size=80"
+    avatar_url = "https://datafruits.fm/assets/images/emojis/coach_mcguirk.png"
     push(socket, @topic, "authorize", %{user: "coach", avatarUrl: avatar_url})
     IO.puts('handle_join')
 
