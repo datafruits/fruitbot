@@ -8,6 +8,8 @@ defmodule Fruitbot.Worker do
 
   @interval 120 * 60 * 1000
 
+  @avatar_url "https://datafruits.fm/assets/images/emojis/coach_mcguirk.png"
+
   def start_link(args) do
     Slipstream.start_link(__MODULE__, args, name: __MODULE__)
   end
@@ -36,8 +38,7 @@ defmodule Fruitbot.Worker do
   @impl Slipstream
   @spec handle_join(<<_::88>>, any, Slipstream.Socket.t()) :: {:ok, Slipstream.Socket.t()}
   def handle_join(@topic, _join_response, socket) do
-    avatar_url = "https://datafruits.fm/assets/images/emojis/coach_mcguirk.png"
-    push(socket, @topic, "authorize", %{user: "coach", avatarUrl: avatar_url})
+    push(socket, @topic, "authorize", %{user: "coach", avatarUrl: @avatar_url})
     IO.puts('handle_join')
 
     {:ok, socket}
@@ -103,7 +104,7 @@ defmodule Fruitbot.Worker do
   defp send_message(
          socket,
          body,
-         avatar_url \\ "https://cdn.discordapp.com/avatars/961310729644957786/888d15c8ee637d0793c8a733ca1dd981.webp?size=80"
+         avatar_url \\ @avatar_url
        ) do
     channel_msg = %{
       user: "coach",
